@@ -2118,6 +2118,7 @@
   .wt-method.GET  { background: rgba(96,165,250,.12); color: #93C5FD; }
   .wt-method.SDK  { background: rgba(43,99,217,.12);  color: #93C5FD; }
   .wt-method.CB   { background: rgba(251,191,36,.1);  color: #FCD34D; }
+  .wt-method.UI   { background: rgba(217,119,6,.12);  color: #FBB040; }
 
   .wt-code-pre {
     margin: 0; padding: 14px 16px;
@@ -2750,7 +2751,7 @@
   function renderCard() {
     var s = STEPS[cur]
     var r = WT_RESPONSES[cur]
-    var mc = s.method === 'POST' ? 'POST' : s.method === 'GET' ? 'GET' : s.method === 'SDK' ? 'SDK' : 'CB'
+    var mc = s.method === 'POST' ? 'POST' : s.method === 'GET' ? 'GET' : s.method === 'SDK' ? 'SDK' : s.method === 'UI' ? 'UI' : 'CB'
     wtActiveTab = 0
     document.getElementById('wt-card').innerHTML =
       '<div class="wt-card-top">' +
