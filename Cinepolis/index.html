@@ -45,12 +45,13 @@
       margin-bottom: 20px;
     }
     .pg-logo-dot {
-      width: 24px; height: 24px;
+      width: 32px; height: 32px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
+      flex-shrink: 0;
     }
-    .pg-logo-dot svg { width: 24px; height: 24px; }
+    .pg-logo-dot svg { width: 32px; height: 32px; }
     .pg-logo-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.8); }
     .pg-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
     .pg-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 16px; }
@@ -815,10 +816,8 @@
     <div class="pg-logo-dot">
       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="50" fill="#1E3177"/>
-        <!-- Outer C: concentric, r=34, 270° arc, gap on right (±45°) -->
-        <path d="M74.0 74.0A34 34 0 1 0 74.0 26.0" stroke="white" stroke-width="13" stroke-linecap="round"/>
-        <!-- Inner C: concentric, r=17, same gap -->
-        <path d="M62.0 62.0A17 17 0 1 0 62.0 38.0" stroke="white" stroke-width="8" stroke-linecap="round"/>
+        <path d="M74 74A34 34 0 1 0 74 26" stroke="white" stroke-width="14"/>
+        <path d="M62 62A17 17 0 1 0 62 38" stroke="white" stroke-width="9"/>
       </svg>
     </div>
     <span class="pg-logo-name">Cinépolis</span>
