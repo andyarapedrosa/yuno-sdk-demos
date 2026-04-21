@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Cinépolis Go — Yuno SDK Lite</title>
+  <title>Cinépolis Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -46,11 +46,11 @@
     }
     .pg-logo-dot {
       width: 24px; height: 24px;
-      background: linear-gradient(135deg,#E30613,#ff4d5a);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
     }
-    .pg-logo-dot svg { width: 12px; height: 12px; }
+    .pg-logo-dot svg { width: 24px; height: 24px; }
     .pg-logo-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.8); }
     .pg-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
     .pg-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 16px; }
@@ -813,9 +813,13 @@
 <div class="pg-header">
   <div class="pg-logo">
     <div class="pg-logo-dot">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="50" fill="#1E3177"/>
+        <path d="M72.6 72.6A32 32 0 1 0 72.6 27.4" stroke="white" stroke-width="14" stroke-linecap="round"/>
+        <path d="M64.6 57.1A10 10 0 1 0 64.6 42.9" stroke="white" stroke-width="7" stroke-linecap="round"/>
+      </svg>
     </div>
-    <span class="pg-logo-name">Cinépolis Go × Yuno</span>
+    <span class="pg-logo-name">Cinépolis Demo</span>
   </div>
   <div class="pg-title">SDK Lite — Checkout Demo</div>
   <div class="pg-sub">Simulação do fluxo de pagamento com Yuno SDK Lite integrado</div>
