@@ -2231,6 +2231,42 @@
   .wt-sum-val { font-weight:600; }
   .wt-sum-grand { display:flex; justify-content:space-between; padding:13px 0 0; font-size:15px; font-weight:800; }
   .wt-sum-grand .wt-sum-val { color:#4ade80; font-size:17px; }
+
+  /* ─── Request / Response tabs ─── */
+  .wt-tabs-row {
+    display: flex; align-items: center; gap: 2px;
+    padding: 0 14px;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    background: #06101E;
+  }
+  .wt-tab {
+    background: transparent; border: none;
+    padding: 9px 12px;
+    font-size: 11.5px; font-weight: 600; font-family: inherit;
+    color: rgba(255,255,255,.3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .wt-tab:hover { color: rgba(255,255,255,.6); }
+  .wt-tab.wt-on { color: #6B9FFF; border-bottom-color: #2B63D9; }
+
+  .wt-resp-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    background: #06101E;
+  }
+  .wt-resp-badge {
+    font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 6px; letter-spacing: .2px;
+  }
+  .wt-resp-badge.ok  { background: rgba(34,197,94,.12); color: #4ade80; }
+  .wt-resp-badge.sdk { background: rgba(43,99,217,.12);  color: #93C5FD; }
+  .wt-resp-badge.tds { background: rgba(251,191,36,.1);  color: #FCD34D; }
+  .wt-resp-meta { font-size: 11px; color: rgba(255,255,255,.28); }
+  .wt-resp-meta strong { color: rgba(255,255,255,.5); }
 </style>
 
 <!-- ════════════════════ WALKTHROUGH SECTION ════════════════════ -->
@@ -2649,7 +2685,51 @@
     }
   ]
 
+  var WT_RESPONSES = [
+    {
+      badge: 'ok', status: '201 Created', time: '213ms', size: '0.6 kb',
+      code: '{\n  <span class="p">"id"</span>: <span class="s">"cust_mx_29f3a8e1c4b7d2"</span>,\n  <span class="p">"merchant_customer_id"</span>: <span class="s">"cine_saman_001"</span>,\n  <span class="p">"first_name"</span>: <span class="s">"Saman"</span>,\n  <span class="p">"last_name"</span>: <span class="s">"Mortazavi Camacho"</span>,\n  <span class="p">"email"</span>: <span class="s">"saman.mor.cam@gmail.com"</span>,\n  <span class="p">"country"</span>: <span class="s">"MX"</span>,\n  <span class="p">"created_at"</span>: <span class="s">"2026-04-20T19:42:11.203Z"</span>\n}'
+    },
+    {
+      badge: 'ok', status: '201 Created', time: '187ms', size: '0.4 kb',
+      code: '{\n  <span class="p">"checkout_session"</span>: <span class="s">"cs_xY9qLm3R7pNk8vHb2dWe5fZa"</span>,\n  <span class="p">"status"</span>: <span class="s">"CREATED"</span>,\n  <span class="p">"amount"</span>: {\n    <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n    <span class="p">"value"</span>: <span class="n">44800</span>\n  },\n  <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n  <span class="p">"expires_at"</span>: <span class="s">"2026-04-20T20:42:11.203Z"</span>\n}'
+    },
+    {
+      badge: 'ok', status: '200 OK', time: '94ms', size: '1.1 kb',
+      code: '{\n  <span class="p">"payment_methods"</span>: [\n    { <span class="p">"type"</span>: <span class="s">"CARD"</span>,          <span class="p">"name"</span>: <span class="s">"Credit / Debit Card"</span> },\n    { <span class="p">"type"</span>: <span class="s">"APPLE_PAY"</span>,     <span class="p">"name"</span>: <span class="s">"Apple Pay"</span>          },\n    { <span class="p">"type"</span>: <span class="s">"CLICK_TO_PAY"</span>,  <span class="p">"name"</span>: <span class="s">"Click to Pay"</span>       },\n    { <span class="p">"type"</span>: <span class="s">"APLAZO"</span>,       <span class="p">"name"</span>: <span class="s">"Aplazo"</span>             },\n    { <span class="p">"type"</span>: <span class="s">"PAYPAL"</span>,       <span class="p">"name"</span>: <span class="s">"PayPal"</span>             }\n  ]\n}'
+    },
+    {
+      badge: 'sdk', status: 'SDK Event', time: '', size: '',
+      code: '{\n  <span class="p">"event"</span>: <span class="s">"CHECKOUT_LITE_MOUNTED"</span>,\n  <span class="p">"paymentMethodType"</span>: <span class="s">"CARD"</span>,\n  <span class="p">"renderMode"</span>: <span class="s">"element"</span>,\n  <span class="p">"selector"</span>: <span class="s">"#yuno-payment-form"</span>,\n  <span class="p">"status"</span>: <span class="s">"READY"</span>\n}'
+    },
+    {
+      badge: 'sdk', status: 'SDK Callback', time: '', size: '',
+      code: '<span class="c">// yunoPaymentMethodSelected(data)</span>\n{\n  <span class="p">"paymentMethodType"</span>: <span class="s">"CARD"</span>,\n  <span class="p">"vaultedToken"</span>: <span class="k">null</span>\n}'
+    },
+    {
+      badge: 'sdk', status: 'SDK Callback', time: '', size: '',
+      code: '<span class="c">// yunoCreatePayment(oneTimeToken)</span>\n<span class="c">// Single-use JWT passed as argument:</span>\n\n<span class="s">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9</span>\n<span class="s"> .eyJzdWIiOiJjdXN0X214XzI5ZjNhOGUxYzRi</span>\n<span class="s">  N2QyIiwicG10IjoiQ0FSRCIsImV4cCI6MTc0N</span>\n<span class="s">  TI3MDU5M30.RSASHA256_sig_omitted..."</span>\n\n<span class="c">// Valid for one POST /v1/payments call only</span>'
+    },
+    {
+      badge: 'ok', status: '201 Created', time: '341ms', size: '0.7 kb',
+      code: '{\n  <span class="p">"id"</span>: <span class="s">"pay_4dF8kL9mRq2wXn7c"</span>,\n  <span class="p">"status"</span>: <span class="s">"PENDING"</span>,\n  <span class="p">"payment_workflow"</span>: <span class="s">"THREE_D_SECURE"</span>,\n  <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n  <span class="p">"amount"</span>: {\n    <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n    <span class="p">"value"</span>: <span class="n">44800</span>\n  },\n  <span class="p">"created_at"</span>: <span class="s">"2026-04-20T19:42:14.881Z"</span>\n}'
+    },
+    {
+      badge: 'sdk', status: 'SDK Event', time: '', size: '',
+      code: '{\n  <span class="p">"event"</span>: <span class="s">"ACTION_REQUIRED"</span>,\n  <span class="p">"type"</span>: <span class="s">"THREE_D_SECURE"</span>,\n  <span class="p">"action"</span>: <span class="s">"CHALLENGE"</span>,\n  <span class="p">"rendered_in"</span>: <span class="s">"#yuno-action-form"</span>,\n  <span class="p">"version"</span>: <span class="s">"EMV_3DS_2"</span>\n}'
+    },
+    {
+      badge: 'tds', status: '3DS Auth', time: '', size: '',
+      code: '{\n  <span class="p">"eci"</span>: <span class="s">"05"</span>,\n  <span class="p">"authenticated"</span>: <span class="k">true</span>,\n  <span class="p">"authentication_value"</span>: <span class="s">"AAIBBEVEcQAAAAAAAAAAAAAAAAA="</span>,\n  <span class="p">"xid"</span>: <span class="s">"MDAwMDAwMDAwMDAxMjM0NTY3ODk="</span>,\n  <span class="p">"ds_transaction_id"</span>: <span class="s">"97267598-FAE6-48F2-8083-C23433CBEFD4"</span>\n}'
+    },
+    {
+      badge: 'ok', status: '200 Approved', time: '', size: '',
+      code: '{\n  <span class="p">"id"</span>: <span class="s">"pay_4dF8kL9mRq2wXn7c"</span>,\n  <span class="p">"status"</span>: <span class="s">"APPROVED"</span>,\n  <span class="p">"amount"</span>: {\n    <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n    <span class="p">"value"</span>: <span class="n">44800</span>\n  },\n  <span class="p">"payment_method"</span>: {\n    <span class="p">"type"</span>: <span class="s">"CARD"</span>,\n    <span class="p">"last4"</span>: <span class="s">"4242"</span>,\n    <span class="p">"brand"</span>: <span class="s">"VISA"</span>,\n    <span class="p">"holder_name"</span>: <span class="s">"SAMAN MORTAZAVI"</span>\n  },\n  <span class="p">"created_at"</span>: <span class="s">"2026-04-20T19:42:14.881Z"</span>,\n  <span class="p">"approved_at"</span>: <span class="s">"2026-04-20T19:42:17.432Z"</span>\n}'
+    }
+  ]
+
   var cur = 0
+  var wtActiveTab = 0
   var wtScreen = 0
   var wtCardOpen = false
   var wtQties = { adulto: 2, nino: 0, elder: 0 }
@@ -2671,7 +2751,9 @@
 
   function renderCard() {
     var s = STEPS[cur]
+    var r = WT_RESPONSES[cur]
     var mc = s.method === 'POST' ? 'POST' : s.method === 'GET' ? 'GET' : s.method === 'SDK' ? 'SDK' : 'CB'
+    wtActiveTab = 0
     document.getElementById('wt-card').innerHTML =
       '<div class="wt-card-top">' +
         '<div class="wt-step-circle" style="background:' + s.lc + '1A;color:' + s.lc + ';border:1.5px solid ' + s.lc + '44">' + s.num + '</div>' +
@@ -2683,12 +2765,23 @@
         '</div>' +
       '</div>' +
       '<div class="wt-card-desc">' + s.desc + '</div>' +
-      '<div class="wt-code-block">' +
+      '<div class="wt-tabs-row">' +
+        '<button class="wt-tab wt-on" id="wt-tab-0" onclick="wtTab(0)">Request</button>' +
+        '<button class="wt-tab" id="wt-tab-1" onclick="wtTab(1)">Response</button>' +
+      '</div>' +
+      '<div id="wt-pane-req" class="wt-code-block">' +
         '<div class="wt-code-bar">' +
           '<div class="wt-code-label"><div class="wt-code-dot" style="background:' + s.lc + '"></div>' + s.ep + '</div>' +
           '<span class="wt-method ' + mc + '">' + mc + '</span>' +
         '</div>' +
         '<pre class="wt-code-pre">' + s.code + '</pre>' +
+      '</div>' +
+      '<div id="wt-pane-resp" style="display:none">' +
+        '<div class="wt-resp-bar">' +
+          '<span class="wt-resp-badge ' + r.badge + '">' + r.status + '</span>' +
+          (r.time ? '<span class="wt-resp-meta"><strong>' + r.time + '</strong> · ' + r.size + '</span>' : '') +
+        '</div>' +
+        '<pre class="wt-code-pre">' + r.code + '</pre>' +
       '</div>'
     document.getElementById('wt-counter').textContent = 'Step ' + (cur + 1) + ' of ' + STEPS.length
     document.getElementById('wt-prev').disabled = cur === 0
@@ -2708,6 +2801,18 @@
   }
 
   window.wtNav = function(dir) { wtGoStep(cur + dir) }
+
+  window.wtTab = function(t) {
+    wtActiveTab = t
+    var t0 = document.getElementById('wt-tab-0')
+    var t1 = document.getElementById('wt-tab-1')
+    var p0 = document.getElementById('wt-pane-req')
+    var p1 = document.getElementById('wt-pane-resp')
+    if (t0) t0.classList.toggle('wt-on', t === 0)
+    if (t1) t1.classList.toggle('wt-on', t === 1)
+    if (p0) p0.style.display = t === 0 ? '' : 'none'
+    if (p1) p1.style.display = t === 1 ? '' : 'none'
+  }
 
   // Initial render
   renderTrail()
