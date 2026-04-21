@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Cinépolis Go — Yuno SDK Lite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080F1C;
+      --surface:   #0C1929;
+      --card:      #0E1E35;
+      --card-h:    #112440;
+      --blue:      #2B63D9;
+      --blue-h:    #3B73E9;
+      --white:     #FFFFFF;
+      --muted:     rgba(255,255,255,.5);
+      --muted2:    rgba(255,255,255,.3);
+      --divider:   rgba(255,255,255,.06);
+      --green:     #16A34A;
+    }
+
+    html, body {
+      background: #020609;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--white);
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Page header ─── */
+    .pg-header {
+      text-align: center;
+      padding: 52px 24px 36px;
+    }
+    .pg-logo {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 100px;
+      padding: 6px 14px 6px 8px;
+      margin-bottom: 20px;
+    }
+    .pg-logo-dot {
+      width: 24px; height: 24px;
+      background: linear-gradient(135deg,#E30613,#ff4d5a);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pg-logo-dot svg { width: 12px; height: 12px; }
+    .pg-logo-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.8); }
+    .pg-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
+    .pg-sub { font-size: 14px; color: rgba(255,255,255,.4); margin-bottom: 16px; }
+    .pg-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(43,99,217,.15);
+      border: 1px solid rgba(43,99,217,.3);
+      color: #6B9FFF;
+      font-size: 11px; font-weight: 700;
+      padding: 5px 12px; border-radius: 100px;
+    }
+    .pg-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #E30613; }
+
+    /* ─── Layout ─── */
+    .phones-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 28px;
+      padding: 0 24px 80px;
+      flex-wrap: wrap;
+    }
+    .phone-col { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .country-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 100px; padding: 5px 14px 5px 10px;
+      font-size: 13px; font-weight: 600;
+      color: rgba(255,255,255,.75);
+    }
+    .country-badge span { font-size: 20px; line-height: 1; }
+    .col-label { text-align: center; max-width: 220px; }
+    .col-tag {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px; margin-bottom: 6px;
+    }
+    .col-tag.default { background: rgba(255,255,255,.06); color: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.08); }
+    .col-tag.sdk     { background: rgba(43,99,217,.15); color: #6B9FFF; border: 1px solid rgba(43,99,217,.25); }
+    .col-tag.success { background: rgba(22,163,74,.15); color: #4ade80; border: 1px solid rgba(22,163,74,.25); }
+    .col-label h3 { font-size: 14px; font-weight: 700; color: white; margin-bottom: 4px; }
+    .col-label p  { font-size: 12px; color: rgba(255,255,255,.35); line-height: 1.5; }
+    .col-label code { font-size: 11px; color: #6B9FFF; background: rgba(43,99,217,.1); padding: 1px 5px; border-radius: 4px; }
+
+    .arrow-sep {
+      padding-top: 90px; color: #1a2030;
+      display: flex; align-items: flex-start;
+    }
+    @media (max-width: 900px) { .arrow-sep { display: none; } }
+
+    /* ─── Phone shell ─── */
+    .phone {
+      width: 375px;
+      background: var(--bg);
+      border-radius: 50px;
+      border: 9px solid #111820;
+      box-shadow:
+        0 0 0 1px #1c2535,
+        0 40px 100px rgba(0,0,0,.9),
+        0 12px 30px rgba(0,0,0,.5);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      width: 126px; height: 34px;
+      background: #000;
+      border-radius: 20px;
+      margin: 10px auto 0;
+      position: relative; z-index: 5;
+      flex-shrink: 0;
+    }
+
+    /* Status bar */
+    .sbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 22px 2px;
+      font-size: 14px; font-weight: 600;
+      flex-shrink: 0;
+    }
+    .sbar-icons { display: flex; gap: 6px; align-items: center; }
+
+    /* ─── Movie header ─── */
+    .movie-header {
+      position: relative;
+      padding: 10px 20px 18px;
+      text-align: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .mh-bg {
+      position: absolute; inset: 0;
+      background-image: url('mario-poster.png');
+      background-size: cover;
+      background-position: center 20%;
+      filter: brightness(.45) saturate(1.2);
+    }
+    .mh-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(8,15,28,.3) 0%, rgba(8,15,28,.85) 100%);
+    }
+    .mh-stars { position: absolute; inset: 0; overflow: hidden; }
+    .star { position: absolute; background: white; border-radius: 50%; }
+    .mh-nav {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .nav-back {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white;
+    }
+    .nav-ttl { font-size: 17px; font-weight: 700; }
+    .nav-ava {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,.8);
+    }
+    .mh-content { position: relative; z-index: 2; }
+    .mh-step { font-size: 12px; color: var(--muted); margin-bottom: 5px; letter-spacing: .3px; }
+    .mh-movie { font-size: 16px; font-weight: 700; margin-bottom: 3px; line-height: 1.3; }
+    .mh-cinema { font-size: 13px; color: var(--muted); margin-bottom: 1px; }
+    .mh-details { font-size: 13px; color: var(--muted2); }
+
+    /* ─── Scrollable content ─── */
+    .page-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      max-height: 660px;
+    }
+    .page-content::-webkit-scrollbar { display: none; }
+
+    /* ─── Sections ─── */
+    .section {
+      padding: 22px 20px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .section:last-child { border-bottom: none; }
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      margin-bottom: 18px;
+      line-height: 1.15;
+    }
+
+    /* ─── Datos personales ─── */
+    .dp-field { margin-bottom: 16px; }
+    .dp-field:last-child { margin-bottom: 0; }
+    .dp-label { font-size: 12px; color: var(--muted); margin-bottom: 3px; font-weight: 500; }
+    .dp-value { font-size: 16px; font-weight: 700; }
+
+    /* ─── Payment method cards ─── */
+    .pm-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background .12s, border-color .12s;
+    }
+    .pm-card:hover { background: var(--card-h); }
+    .pm-card.selected {
+      border-color: var(--blue);
+      background: rgba(43,99,217,.1);
+    }
+    .pm-card-left { flex: 1; min-width: 0; }
+    .pm-card-name { font-size: 16px; font-weight: 700; line-height: 1.25; }
+    .pm-card-sub  { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .pm-card-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .pm-logos { display: flex; align-items: center; gap: 4px; }
+
+    /* Amex */
+    .logo-amex {
+      background: #016FD0;
+      color: white;
+      font-size: 6px; font-weight: 900;
+      line-height: 1.3; text-align: center;
+      padding: 3px 4px;
+      border-radius: 4px;
+      letter-spacing: .3px;
+    }
+    /* Visa */
+    .logo-visa {
+      background: white;
+      color: #1A1F71;
+      font-size: 11px; font-weight: 900; font-style: italic;
+      padding: 2px 5px;
+      border-radius: 4px;
+      letter-spacing: -.3px;
+    }
+    /* Mastercard */
+    .logo-mc { display: flex; align-items: center; }
+    .mc1 { width: 18px; height: 18px; border-radius: 50%; background: #EB001B; }
+    .mc2 { width: 18px; height: 18px; border-radius: 50%; background: #F79E1B; margin-left: -8px; }
+
+    /* Click to Pay */
+    .logo-c2p {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .c2p-symbol {
+      display: flex; align-items: center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 5px;
+      padding: 3px 6px;
+      gap: 2px;
+    }
+    .c2p-symbol svg { width: 20px; height: 14px; }
+
+    /* Aplazo */
+    .logo-aplazo {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #72E0DC;
+      border-radius: 100px;
+      padding: 5px 9px;
+    }
+    .aplazo-wm {
+      font-size: 11.5px; font-weight: 700;
+      color: #0A1020; letter-spacing: -.2px; line-height: 1;
+    }
+
+    /* PayPal */
+    .logo-paypal {
+      display: flex; align-items: baseline; gap: 0;
+      line-height: 1;
+    }
+    .pp-dark { font-size: 16px; font-weight: 900; color: #003087; font-style: italic; }
+    .pp-light { font-size: 16px; font-weight: 900; color: #009CDE; font-style: italic; margin-left: -4px; }
+    .pp-rest  { font-size: 12px; font-weight: 700; color: #003087; margin-left: 1px; align-self: center; }
+
+    /* "+" button */
+    .plus-btn {
+      width: 40px; height: 40px;
+      background: var(--blue);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: none; cursor: pointer;
+      transition: background .12s, transform .1s;
+    }
+    .plus-btn:hover  { background: var(--blue-h); }
+    .plus-btn:active { transform: scale(.93); }
+    .plus-btn svg { width: 18px; height: 18px; }
+    .plus-btn.open { background: rgba(43,99,217,.2); border: 1px solid rgba(43,99,217,.4); }
+    .plus-btn.open svg { stroke: #6B9FFF; }
+
+    /* ─── Yuno SDK annotation ─── */
+    .sdk-annotation {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 600;
+      color: rgba(107,159,255,.6);
+      margin-bottom: 10px;
+      letter-spacing: .3px;
+    }
+    .sdk-annotation::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #E30613;
+      flex-shrink: 0;
+    }
+
+    /* ─── Card form (Yuno Secure Fields simulation) ─── */
+    .card-form {
+      background: #08131F;
+      border: 1px solid rgba(43,99,217,.25);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 8px;
+      display: none;
+    }
+    .card-form.open { display: block; }
+    .cf-topbar {
+      background: rgba(43,99,217,.12);
+      padding: 9px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(43,99,217,.15);
+    }
+    .cf-topbar-left {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; color: #6B9FFF;
+    }
+    .cf-dot { width: 6px; height: 6px; border-radius: 50%; background: #E30613; }
+    .cf-topbar-right { font-size: 11px; font-weight: 900; color: rgba(227,6,19,.7); letter-spacing: .5px; }
+    .cf-body { padding: 14px; }
+
+    /* Card preview */
+    .vcard {
+      height: 120px;
+      background: linear-gradient(135deg, #0D2248 0%, #163A72 60%, #1C4A8A 100%);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .vcard::before {
+      content: ''; position: absolute;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      top: -50px; right: -40px;
+    }
+    .vcard::after {
+      content: ''; position: absolute;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(255,255,255,.03);
+      bottom: -30px; left: -20px;
+    }
+    .vc-chip {
+      width: 30px; height: 22px;
+      background: linear-gradient(135deg, #B8892A, #E8C84A);
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .vc-num {
+      font-size: 13px; font-weight: 600;
+      font-family: 'SF Mono', 'Courier New', monospace;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,.85);
+      margin-bottom: 10px;
+    }
+    .vc-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .vc-holder-l, .vc-exp-l { font-size: 7px; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .5px; }
+    .vc-holder-v, .vc-exp-v { font-size: 11px; font-weight: 700; margin-top: 2px; }
+    .vc-exp-v { text-align: right; }
+    .vc-network { position: absolute; bottom: 12px; right: 14px; display: flex; }
+    .vcmc1 { width: 20px; height: 20px; border-radius: 50%; background: rgba(235,0,27,.85); }
+    .vcmc2 { width: 20px; height: 20px; border-radius: 50%; background: rgba(247,158,27,.85); margin-left: -8px; }
+
+    /* form inputs */
+    .fi { margin-bottom: 10px; }
+    .fi-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: block; font-weight: 500; }
+    .fi-input {
+      width: 100%;
+      background: #0F1E30;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px; color: white;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .12s;
+    }
+    .fi-input:focus { border-color: rgba(43,99,217,.6); }
+    .fi-input::placeholder { color: rgba(255,255,255,.25); }
+    .fi-row { display: flex; gap: 8px; }
+    .fi-row .fi { flex: 1; }
+    .fi-select {
+      width: 100%;
+      background: #0F1E30;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      padding: 10px 30px 10px 12px;
+      font-size: 13px; color: white;
+      font-family: inherit;
+      outline: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(255,255,255,0.3)'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 18px;
+      cursor: pointer;
+    }
+    .fi-select option { background: #0C1929; }
+    .fi-pci {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10px; color: rgba(255,255,255,.25);
+      margin-top: 8px;
+    }
+
+    /* ─── Totals ─── */
+    .totals {
+      padding: 16px 20px;
+      background: var(--bg);
+    }
+    .totals-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--divider);
+      font-size: 14px;
+    }
+    .totals-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .totals-row .tl { color: var(--muted); }
+    .totals-row .tv { font-weight: 700; font-size: 15px; }
+    .totals-row.grand { padding-top: 12px; }
+    .totals-row.grand .tl { color: white; font-weight: 700; font-size: 15px; }
+    .totals-row.grand .tv { font-size: 20px; font-weight: 900; }
+
+    /* ─── Pay button ─── */
+    .pay-area {
+      padding: 14px 20px 30px;
+    }
+    .pay-btn {
+      width: 100%; padding: 16px;
+      background: var(--blue);
+      color: white; font-size: 16px; font-weight: 800;
+      border: none; border-radius: 16px; cursor: pointer;
+      font-family: inherit;
+      transition: background .12s, transform .1s;
+      letter-spacing: -.1px;
+    }
+    .pay-btn:active { background: var(--blue-h); transform: scale(.98); }
+
+    /* ─── Processing overlay ─── */
+    .proc-overlay {
+      position: absolute; inset: 0;
+      background: rgba(8,15,28,.9);
+      backdrop-filter: blur(8px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 100;
+      border-radius: 41px;
+    }
+    .proc-ring {
+      width: 60px; height: 60px; border-radius: 50%;
+      border: 3px solid rgba(255,255,255,.08);
+      border-top-color: var(--blue);
+      animation: spin 1s linear infinite;
+      margin-bottom: 18px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .proc-t { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+    .proc-s { font-size: 13px; color: var(--muted); }
+
+    /* ─── Success screen ─── */
+    .success-screen {
+      display: none; flex-direction: column;
+      align-items: center; padding: 32px 20px 28px;
+      text-align: center; background: var(--bg);
+      min-height: 720px; overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .success-screen::-webkit-scrollbar { display: none; }
+    .success-screen.show { display: flex; }
+
+    .success-glow {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+      box-shadow: 0 0 40px rgba(22,163,74,.4);
+      animation: pop .45s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .suc-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; letter-spacing: -.3px; }
+    .suc-sub { font-size: 14px; color: var(--muted); line-height: 1.55; max-width: 240px; }
+
+    /* Ticket */
+    .ticket {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 18px;
+      margin: 20px 0 16px;
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,.05);
+      position: relative;
+    }
+    .tkt-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .tkt-poster {
+      width: 42px; height: 58px; border-radius: 8px; flex-shrink: 0;
+      overflow: hidden; object-fit: cover;
+    }
+    .tkt-movie { font-size: 13px; font-weight: 800; margin-bottom: 3px; line-height: 1.3; }
+    .tkt-info  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+    .tkt-perforation {
+      display: flex; align-items: center; gap: 0;
+      margin: 12px -18px;
+    }
+    .tkt-perf-circle {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--bg); flex-shrink: 0;
+    }
+    .tkt-perf-line {
+      flex: 1;
+      border-top: 1.5px dashed rgba(255,255,255,.1);
+    }
+
+    .tkt-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; margin-bottom: 7px;
+    }
+    .tkt-row:last-child { margin-bottom: 0; }
+    .tkt-row .tl { color: var(--muted); }
+    .tkt-row .tv { font-weight: 700; }
+
+    .barcode-wrap { margin-top: 14px; }
+    .barcode { display: flex; gap: 1.5px; align-items: flex-end; height: 32px; }
+    .bar { background: rgba(255,255,255,.3); border-radius: 1px; }
+    .bc-num { font-size: 9px; color: rgba(255,255,255,.25); letter-spacing: 2.5px; margin-top: 5px; text-align: center; font-family: monospace; }
+
+    .suc-btns { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .btn-green-full {
+      background: var(--green); color: white;
+      font-size: 15px; font-weight: 700;
+      border: none; border-radius: 14px; padding: 15px;
+      cursor: pointer; font-family: inherit;
+    }
+    .btn-ghost-full {
+      background: transparent; color: var(--muted);
+      font-size: 14px; font-weight: 600;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 14px;
+      cursor: pointer; font-family: inherit;
+    }
+
+    /* ─── Shared Aplazo SVG icon ─── */
+    .aplazo-icon { display: block; }
+
+    /* ─── UPI PIN Pad (India 3DS) ─── */
+    .upi-pin-screen { background: #0D1117; }
+    .upi-merchant-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px; padding: 14px 16px;
+      text-align: center; margin: 0 20px 20px;
+    }
+    .upi-amount { font-size: 30px; font-weight: 800; color: white; letter-spacing: -1px; }
+    .upi-pin-dots {
+      display: flex; gap: 12px; justify-content: center; margin-bottom: 8px;
+    }
+    .upi-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.25);
+      transition: all .12s;
+    }
+    .upi-dot.filled { background: #4285F4; border-color: #4285F4; }
+    .upi-pin-hint { text-align: center; font-size: 11px; color: rgba(255,255,255,.35); margin-bottom: 18px; }
+    .upi-numpad {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; padding: 0 20px 20px;
+    }
+    .upi-key {
+      background: rgba(255,255,255,.07);
+      border: none; border-radius: 14px;
+      height: 54px; font-size: 22px; font-weight: 500;
+      color: white; cursor: pointer; font-family: inherit;
+      transition: background .1s;
+    }
+    .upi-key:active { background: rgba(255,255,255,.18); transform: scale(.95); }
+    .upi-key.action { background: #1D4ED8; font-size: 18px; }
+    .upi-key.delete { background: rgba(255,255,255,.04); }
+    .upi-key.zero { background: rgba(255,255,255,.07); }
+
+    /* ─── Spain logos ─── */
+    .logo-bizum {
+      background: linear-gradient(135deg,#FF6E31,#7B2D8B);
+      color: white; font-size: 11px; font-weight: 700;
+      padding: 4px 9px; border-radius: 6px; letter-spacing: -.2px;
+    }
+    .logo-klarna {
+      background: #FFB3C7; color: #1A1A1A;
+      font-size: 11px; font-weight: 800;
+      padding: 4px 9px; border-radius: 6px; letter-spacing: -.3px;
+    }
+    .logo-sequra {
+      background: #00A99D; color: white;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 9px; border-radius: 6px; letter-spacing: -.2px;
+    }
+
+    /* ─── SCA / Santander 3DS ─── */
+    .sca-screen { background: #F2F2F2; }
+    .sca-bank-header {
+      background: #EC0000; padding: 12px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .sca-bank-name {
+      font-size: 16px; font-weight: 900; color: white; letter-spacing: -.5px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .sca-psd2-badge {
+      font-size: 9px; font-weight: 700; color: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.2); border-radius: 6px;
+      padding: 3px 7px; letter-spacing: .5px; text-transform: uppercase;
+    }
+    .sca-body {
+      flex: 1; overflow-y: auto; scrollbar-width: none;
+      background: white; padding: 18px 18px 24px;
+    }
+    .sca-body::-webkit-scrollbar { display: none; }
+    .sca-steps {
+      display: flex; align-items: flex-start; margin-bottom: 18px;
+    }
+    .sca-step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+    .sca-step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .sca-step.done .sca-step-dot { background: #16A34A; color: white; }
+    .sca-step.active .sca-step-dot { background: #EC0000; color: white; }
+    .sca-step-label { font-size: 10px; color: #aaa; text-align: center; }
+    .sca-step.active .sca-step-label { color: #EC0000; font-weight: 600; }
+    .sca-step-line { flex: 1; height: 2px; background: #e0e0e0; margin: 14px 8px 0; }
+    .sca-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 5px; }
+    .sca-msg { font-size: 11px; color: #666; line-height: 1.55; margin-bottom: 12px; }
+    .sca-hint {
+      font-size: 11px; color: #777; background: #f7f7f7;
+      border-radius: 8px; padding: 8px 10px; margin-bottom: 14px;
+    }
+    .sca-verify-btn {
+      width: 100%; background: #EC0000; color: white;
+      border: none; border-radius: 12px; padding: 13px;
+      font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+    }
+    .sca-verify-btn:active { opacity: .85; }
+    .sca-footer {
+      margin-top: 14px; text-align: center; font-size: 10px; color: #bbb;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+
+    /* ─── India logos ─── */
+    .logo-upi {
+      display: inline-flex; align-items: center;
+      gap: 3px; font-family: inherit;
+    }
+    .upi-pill {
+      background: #FF6B00; color: white;
+      font-size: 10px; font-weight: 900;
+      padding: 3px 6px; border-radius: 5px;
+      letter-spacing: .5px;
+    }
+    .logo-paytm {
+      background: #00BAF2; color: white;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 8px; border-radius: 6px;
+      letter-spacing: -.3px; font-family: inherit;
+    }
+    .logo-rupay {
+      font-size: 8px; font-weight: 900;
+      background: linear-gradient(135deg,#FF6B35,#7B2D8B);
+      color: white; padding: 2px 5px;
+      border-radius: 3px; letter-spacing: .2px;
+      flex-shrink: 0;
+    }
+
+    /* ─── 3DS Challenge Screen ─── */
+    .tds-screen {
+      position: absolute; inset: 0;
+      background: var(--bg);
+      z-index: 200;
+      display: flex; flex-direction: column;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .tds-screen.show { opacity: 1; pointer-events: all; }
+
+    .tds-topbar {
+      padding: 8px 16px 7px;
+      font-size: 10px; color: #6B9FFF;
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(43,99,217,.08);
+      border-bottom: 1px solid rgba(43,99,217,.15);
+      flex-shrink: 0;
+    }
+
+    .tds-body {
+      flex: 1; overflow-y: auto; scrollbar-width: none;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px 18px 28px;
+    }
+    .tds-body::-webkit-scrollbar { display: none; }
+
+    .tds-card {
+      background: white; border-radius: 20px;
+      padding: 22px 18px; width: 100%;
+    }
+
+    .tds-bank-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; padding-bottom: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .tds-bbva { font-size: 18px; font-weight: 900; color: #004990; letter-spacing: -1px; }
+    .tds-3ds-badge {
+      font-size: 9px; font-weight: 700; color: #777;
+      background: #f2f2f2; border-radius: 6px; padding: 3px 7px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+
+    .tds-lock-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+    .tds-lock-icon { color: #004990; }
+    .tds-title { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+
+    .tds-msg { font-size: 11.5px; color: #555; line-height: 1.55; margin-bottom: 12px; }
+
+    .tds-hint {
+      font-size: 11px; color: #777;
+      background: #f7f7f7; border-radius: 8px;
+      padding: 8px 10px; margin-bottom: 16px; line-height: 1.45;
+    }
+
+    .tds-otp-row { display: flex; gap: 7px; justify-content: center; margin-bottom: 10px; }
+    .tds-otp {
+      width: 38px; height: 46px;
+      border: 1.5px solid #e0e0e0; border-radius: 10px;
+      text-align: center; font-size: 20px; font-weight: 700;
+      color: #1a1a1a; background: #fafafa;
+      outline: none; font-family: inherit;
+      transition: border-color .15s, background .15s;
+    }
+    .tds-otp:focus { border-color: #004990; background: white; }
+    .tds-otp.filled { border-color: #004990; background: #eaf0fb; color: #004990; }
+
+    .tds-resend { font-size: 11px; color: #aaa; text-align: center; margin-bottom: 16px; }
+    .tds-resend span { color: #004990; cursor: pointer; font-weight: 600; }
+
+    .tds-verify-btn {
+      width: 100%; background: #004990; color: white;
+      border: none; border-radius: 12px; padding: 13px;
+      font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+    }
+    .tds-verify-btn:active { opacity: .85; }
+
+    .tds-footer {
+      margin-top: 16px; text-align: center;
+      font-size: 10px; color: rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+
+    /* ─── Phone 1 success overlay ─── */
+    .p1-success {
+      position: absolute; inset: 0;
+      background: var(--bg); z-index: 300;
+      overflow-y: auto; scrollbar-width: none;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .p1-success::-webkit-scrollbar { display: none; }
+    .p1-success.show { opacity: 1; pointer-events: all; }
+    .p1-success .success-screen { min-height: 100%; display: flex; }
+  </style>
+</head>
+<body>
+
+<!-- Page header -->
+<div class="pg-header">
+  <div class="pg-logo">
+    <div class="pg-logo-dot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="pg-logo-name">Cinépolis Go × Yuno</span>
+  </div>
+  <div class="pg-title">SDK Lite — Checkout Demo</div>
+  <div class="pg-sub">Simulação do fluxo de pagamento com Yuno SDK Lite integrado</div>
+  <div class="pg-badge">
+    <div class="pg-badge-dot"></div>
+    mountCheckoutLite() · renderMode: element
+  </div>
+</div>
+
+<div class="phones-row">
+
+  <!-- ════════════════════ PHONE 1: Paso 4 de 4 ════════════════════ -->
+  <div class="phone-col">
+    <div class="country-badge"><span>🇲🇽</span> México</div>
+    <div class="phone" id="phone1">
+      <div class="dynamic-island"></div>
+      <div class="sbar">
+        <span>12:25</span>
+        <div class="sbar-icons">
+          <!-- Signal -->
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white">
+            <rect x="0" y="7" width="3" height="5" rx="1"/>
+            <rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/>
+            <rect x="9" y="2" width="3" height="10" rx="1"/>
+            <rect x="13" y="0" width="3" height="12" rx="1" opacity=".3"/>
+          </svg>
+          <!-- WiFi -->
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white">
+            <path d="M8 10.5a1.5 1.5 0 110 .01L8 10.5z"/>
+            <path d="M4.5 7.5Q8 4.5 11.5 7.5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+            <path d="M2 5Q8 0 14 5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5"/>
+          </svg>
+          <!-- Battery -->
+          <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+            <rect x="0.5" y="0.5" width="18" height="11" rx="3" stroke="white" stroke-width="1"/>
+            <rect x="2" y="2" width="13" height="8" rx="2" fill="white"/>
+            <path d="M20 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Movie header -->
+      <div class="movie-header">
+        <div class="mh-bg"></div>
+        <div class="mh-stars" id="stars1"></div>
+        <div class="mh-nav">
+          <button class="nav-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <span class="nav-ttl">Pago</span>
+          <div class="nav-ava">SM</div>
+        </div>
+        <div class="mh-content">
+          <div class="mh-step">Paso 4 de 4</div>
+          <div class="mh-movie">Super Mario Galaxy: La Película</div>
+          <div class="mh-cinema">Samara</div>
+          <div class="mh-details">20 Abril &nbsp;|&nbsp; 2:20 PM &nbsp;|&nbsp; Sala 1</div>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Datos personales -->
+        <div class="section">
+          <div class="section-title">Datos personales</div>
+          <div class="dp-field">
+            <div class="dp-label">Nombre(s)</div>
+            <div class="dp-value">Saman</div>
+          </div>
+          <div class="dp-field">
+            <div class="dp-label">Apellido(s)</div>
+            <div class="dp-value">Mortazavi Camacho</div>
+          </div>
+          <div class="dp-field" style="margin-bottom:0">
+            <div class="dp-label">Correo electrónico</div>
+            <div class="dp-value">saman.mor.cam@gmail.com</div>
+          </div>
+        </div>
+
+        <!-- Pagar con puntos -->
+        <div class="section">
+          <div class="section-title">Pagar con puntos</div>
+          <img src="club-cinepolis-final.png" alt="CLUB cinépolis"
+               style="max-width:100%; height:auto; display:block; margin-top:2px;">
+        </div>
+
+        <!-- Métodos de pago — Yuno SDK Lite mount -->
+        <div class="section" style="border-bottom:none; padding-bottom:0;">
+          <div class="section-title">Métodos de pago</div>
+          <div class="sdk-annotation">#yuno-payment-form · yuno.mountCheckoutLite()</div>
+
+          <div id="yuno-payment-form">
+
+            <!-- Apple Pay -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Apple Pay</div>
+              </div>
+              <div class="pm-card-right">
+                <svg height="20" viewBox="0 0 56 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- leaf -->
+                  <path d="M16 1.5C16 1.5 14.3 2.8 14 5C15.2 5.1 17 3.9 17 1.8C17 1.6 16.5 1.5 16 1.5Z" fill="white"/>
+                  <!-- body -->
+                  <path d="M14 5.5C13 5.5 12.2 6.1 11.3 6.1C10.3 6.1 9.4 5.5 8.2 5.5C6.3 5.5 4.5 7.2 4.5 10C4.5 13.8 7.3 18.5 9.5 18.5C10.4 18.5 10.9 17.9 12 17.9C13.1 17.9 13.5 18.5 14.5 18.5C16.7 18.5 19.5 13.8 19.5 10C19.5 7.2 17.6 5.5 16 5.5C15.1 5.5 14.6 6.1 14 5.5Z" fill="white"/>
+                  <!-- Pay text -->
+                  <text x="23" y="15.5" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" font-weight="500" letter-spacing="-.3">Pay</text>
+                </svg>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tarjeta -->
+            <div class="pm-card" id="pm-card" onclick="toggleCard()">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Tarjeta de<br>crédito o débito</div>
+              </div>
+              <div class="pm-card-right">
+                <div class="pm-logos">
+                  <div class="logo-amex">AMERICAN<br>EXPRESS</div>
+                  <div class="logo-visa">VISA</div>
+                  <div class="logo-mc"><div class="mc1"></div><div class="mc2"></div></div>
+                </div>
+                <button class="plus-btn" id="plus-card1">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card form -->
+            <div class="card-form" id="card-form1">
+              <div class="cf-topbar">
+                <div class="cf-topbar-left"><div class="cf-dot"></div>Yuno Secure Fields · iframe</div>
+                <div class="cf-topbar-right">yuno</div>
+              </div>
+              <div class="cf-body">
+                <div class="vcard">
+                  <div class="vc-chip"></div>
+                  <div class="vc-num" id="vn1">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+                  <div class="vc-bottom">
+                    <div>
+                      <div class="vc-holder-l">Titular</div>
+                      <div class="vc-holder-v" id="vh1">NOMBRE</div>
+                    </div>
+                    <div>
+                      <div class="vc-exp-l">Válido hasta</div>
+                      <div class="vc-exp-v" id="ve1">MM/AA</div>
+                    </div>
+                  </div>
+                  <div class="vc-network"><div class="vcmc1"></div><div class="vcmc2"></div></div>
+                </div>
+                <div class="fi">
+                  <label class="fi-label">Número de tarjeta</label>
+                  <input class="fi-input" type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtNum(this,'vn1')">
+                </div>
+                <div class="fi">
+                  <label class="fi-label">Nombre del titular</label>
+                  <input class="fi-input" type="text" placeholder="Como aparece en la tarjeta" oninput="document.getElementById('vh1').textContent=this.value.toUpperCase()||'NOMBRE'">
+                </div>
+                <div class="fi-row">
+                  <div class="fi">
+                    <label class="fi-label">Vigencia</label>
+                    <input class="fi-input" type="text" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this,'ve1')">
+                  </div>
+                  <div class="fi">
+                    <label class="fi-label">CVV</label>
+                    <input class="fi-input" type="password" placeholder="•••" maxlength="4">
+                  </div>
+                </div>
+                <div class="fi">
+                  <label class="fi-label">Meses sin intereses</label>
+                  <select class="fi-select">
+                    <option>1 MSI — $448.00</option>
+                    <option>3 MSI — $149.33 / mes</option>
+                    <option>6 MSI — $74.67 / mes</option>
+                    <option>12 MSI — $37.33 / mes</option>
+                  </select>
+                </div>
+                <div class="fi-pci">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  Cifrado por Yuno · PCI DSS Nivel 1
+                </div>
+              </div>
+            </div>
+
+            <!-- Click to Pay -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Click to Pay</div>
+              </div>
+              <div class="pm-card-right">
+                <img src="c2p-logo.png" alt="Click to Pay" style="height:20px; display:block;">
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Aplazo -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Aplazo</div>
+                <div class="pm-card-sub">Paga en quincenas sin tarjeta</div>
+              </div>
+              <div class="pm-card-right">
+                <img src="aplazo-logo.png" alt="aplazo" style="height:20px; display:block;">
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- PayPal -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">PayPal</div>
+              </div>
+              <div class="pm-card-right">
+                <img src="paypal-logo.png" alt="PayPal" style="height:20px; display:block;">
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <!-- Totals -->
+        <div class="totals" style="margin-top:8px;">
+          <div class="totals-row"><span class="tl">Subtotal</span><span class="tv">$442.00</span></div>
+          <div class="totals-row"><span class="tl">Cargo por servicio</span><span class="tv">$6.00</span></div>
+          <div class="totals-row grand"><span class="tl">Total</span><span class="tv">$448.00</span></div>
+        </div>
+
+        <div class="pay-area">
+          <button class="pay-btn" onclick="startProcessing('phone1')">Pagar $448.00</button>
+        </div>
+
+      </div>
+
+      <!-- ── 3DS Challenge Overlay ── -->
+      <div class="tds-screen" id="tds-phone1">
+        <div class="tds-topbar">
+          <div class="cf-dot"></div>
+          #yuno-action-form · yuno.continuePayment()
+        </div>
+        <div class="tds-body">
+          <div class="tds-card">
+            <div class="tds-bank-row">
+              <span class="tds-bbva">BBVA</span>
+              <span class="tds-3ds-badge">3D Secure</span>
+            </div>
+            <div class="tds-lock-row">
+              <svg class="tds-lock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span class="tds-title">Verificación de seguridad</span>
+            </div>
+            <p class="tds-msg">Tu banco solicita confirmar tu identidad para autorizar el pago de <strong>$448.00 MXN</strong> en Cinépolis Go.</p>
+            <div class="tds-hint">
+              Código de 6 dígitos enviado al número terminado en <strong>••34</strong>
+            </div>
+            <div class="tds-otp-row">
+              <input class="tds-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+              <input class="tds-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+              <input class="tds-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+              <input class="tds-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+              <input class="tds-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+              <input class="tds-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+            </div>
+            <p class="tds-resend">¿No recibiste el código? <span>Reenviar</span></p>
+            <button class="tds-verify-btn" onclick="submit3DS('phone1')">Verificar</button>
+          </div>
+          <div class="tds-footer">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Pago protegido por <strong style="color:rgba(255,255,255,.4)">Visa Secure</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Success Overlay (phone 1) ── -->
+      <div class="p1-success" id="suc-phone1">
+        <div class="success-screen show">
+          <div class="success-glow">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="suc-title">¡Pago aprobado!</div>
+          <div class="suc-sub">Tu entrada está confirmada.<br>¡Disfruta la película!</div>
+          <div class="ticket">
+            <div class="tkt-header">
+              <img class="tkt-poster" src="mario-poster.png" alt="Super Mario Galaxy">
+              <div>
+                <div class="tkt-movie">Super Mario Galaxy:<br>La Película</div>
+                <div class="tkt-info">IMAX · Samara · Dom 20/04</div>
+              </div>
+            </div>
+            <div class="tkt-row"><span class="tl">Asientos</span><span class="tv">G8 · G9</span></div>
+            <div class="tkt-row"><span class="tl">Función</span><span class="tv">2:20 PM</span></div>
+            <div class="tkt-row"><span class="tl">Sala</span><span class="tv">Sala 1 IMAX</span></div>
+            <div class="tkt-perforation">
+              <div class="tkt-perf-circle"></div>
+              <div class="tkt-perf-line"></div>
+              <div class="tkt-perf-circle"></div>
+            </div>
+            <div class="tkt-row"><span class="tl">Pedido</span><span class="tv" style="font-size:11px;color:var(--muted)">#CP-20260420-3891</span></div>
+            <div class="tkt-row"><span class="tl">Total pagado</span><span class="tv" style="color:#4ade80">$448.00 MXN</span></div>
+            <div class="tkt-row"><span class="tl">Vía</span><span class="tv" style="font-size:12px;">•••• 9012 · Visa</span></div>
+            <div class="barcode-wrap">
+              <div class="barcode" id="bc1"></div>
+              <div class="bc-num">2026 0420 3891 00</div>
+            </div>
+          </div>
+          <div class="suc-btns">
+            <button class="btn-green-full">Ver entrada digital</button>
+            <button class="btn-ghost-full" onclick="resetPhone('phone1')">Volver al inicio</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-label" style="max-width:280px; text-align:left;">
+      <div class="col-tag default" style="margin-bottom:10px;">Pantalla 1 · Paso 4 de 4</div>
+      <h3 style="font-size:15px; margin-bottom:10px;">SDK Lite en acción</h3>
+
+      <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; margin-bottom:14px;">
+        El <strong style="color:rgba(255,255,255,.75);">Yuno SDK Lite</strong> se monta directamente en
+        <code>#yuno-payment-form</code> vía <code>mountCheckoutLite()</code> con
+        <code>renderMode: element</code> — sin modal, sin redirect, 100% inline en la pantalla de Cinépolis.
+      </p>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#4ade80; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">Control total desde el Dashboard</strong> — los métodos de pago se activan o desactivan directamente en el Dashboard de Yuno, sin tocar una línea de código. El SDK refleja los cambios en tiempo real.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">Métodos localizados automáticamente</strong> — Yuno devuelve solo los métodos disponibles para México (Tarjeta, Click to Pay, Aplazo, PayPal) según la configuración del país.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">Cero datos sensibles en el servidor</strong> — el formulario de tarjeta corre en un iframe aislado (Yuno Secure Fields). Cinépolis solo recibe el <code>oneTimeToken</code>.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">PCI DSS Nivel 1</strong> — Cinépolis no necesita certificación PCI propia; la responsabilidad recae en Yuno.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">100% personalizable</strong> — colores, fuentes y textos del iframe se inyectan vía <code>card.styles</code>, manteniendo la identidad visual de Cinépolis Go.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">3DS y MSI automáticos</strong> — autenticación 3D Secure y meses sin intereses gestionados por el SDK, sin código adicional de Cinépolis.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c2535" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </div>
+
+  <!-- ════════════════════ PHONE 2: India ════════════════════ -->
+  <div class="phone-col">
+    <div class="country-badge"><span>🇮🇳</span> India</div>
+    <div class="phone" id="phone2">
+      <div class="dynamic-island"></div>
+      <div class="sbar">
+        <span>12:26</span>
+        <div class="sbar-icons">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 10.5a1.5 1.5 0 110 .01L8 10.5z"/><path d="M4.5 7.5Q8 4.5 11.5 7.5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M2 5Q8 0 14 5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5"/></svg>
+          <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="3" stroke="white" stroke-width="1"/><rect x="2" y="2" width="13" height="8" rx="2" fill="white"/><path d="M20 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <div class="movie-header">
+        <div class="mh-bg"></div>
+        <div class="mh-stars" id="stars2"></div>
+        <div class="mh-nav">
+          <button class="nav-back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="nav-ttl">Payment</span>
+          <div class="nav-ava">SM</div>
+        </div>
+        <div class="mh-content">
+          <div class="mh-step">Step 4 of 4</div>
+          <div class="mh-movie">Super Mario Galaxy: The Movie</div>
+          <div class="mh-cinema">Mumbai</div>
+          <div class="mh-details">Apr 20 &nbsp;|&nbsp; 2:20 PM &nbsp;|&nbsp; Screen 1</div>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Personal details -->
+        <div class="section">
+          <div class="section-title">Personal details</div>
+          <div class="dp-field">
+            <div class="dp-label">First name</div>
+            <div class="dp-value">Saman</div>
+          </div>
+          <div class="dp-field">
+            <div class="dp-label">Last name</div>
+            <div class="dp-value">Mortazavi Camacho</div>
+          </div>
+          <div class="dp-field" style="margin-bottom:0">
+            <div class="dp-label">Email address</div>
+            <div class="dp-value">saman.mor.cam@gmail.com</div>
+          </div>
+        </div>
+
+        <!-- Club Cinépolis -->
+        <div class="section">
+          <div class="section-title">Pay with points</div>
+          <img src="club-cinepolis-final.png" alt="CLUB cinépolis"
+               style="max-width:100%; height:auto; display:block; margin-top:2px;">
+        </div>
+
+        <!-- Payment methods — India -->
+        <div class="section" style="border-bottom:none; padding-bottom:0;">
+          <div class="section-title">Payment methods</div>
+          <div class="sdk-annotation">#yuno-payment-form · yuno.mountCheckoutLite()</div>
+
+          <div id="yuno-payment-form-2">
+
+            <!-- Apple Pay -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left"><div class="pm-card-name">Apple Pay</div></div>
+              <div class="pm-card-right">
+                <svg height="20" viewBox="0 0 56 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 1.5C16 1.5 14.3 2.8 14 5C15.2 5.1 17 3.9 17 1.8C17 1.6 16.5 1.5 16 1.5Z" fill="white"/>
+                  <path d="M14 5.5C13 5.5 12.2 6.1 11.3 6.1C10.3 6.1 9.4 5.5 8.2 5.5C6.3 5.5 4.5 7.2 4.5 10C4.5 13.8 7.3 18.5 9.5 18.5C10.4 18.5 10.9 17.9 12 17.9C13.1 17.9 13.5 18.5 14.5 18.5C16.7 18.5 19.5 13.8 19.5 10C19.5 7.2 17.6 5.5 16 5.5C15.1 5.5 14.6 6.1 14 5.5Z" fill="white"/>
+                  <text x="23" y="15.5" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" font-weight="500" letter-spacing="-.3">Pay</text>
+                </svg>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- UPI -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">UPI</div>
+                <div class="pm-card-sub">Instant payments</div>
+              </div>
+              <div class="pm-card-right">
+                <div class="logo-upi">
+                  <span class="upi-pill">UPI</span>
+                </div>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Net Banking -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Net Banking</div>
+                <div class="pm-card-sub">All banks</div>
+              </div>
+              <div class="pm-card-right">
+                <svg height="20" viewBox="0 0 28 20" fill="none">
+                  <rect x="1" y="8" width="26" height="11" rx="2" stroke="rgba(255,255,255,.4)" stroke-width="1.4"/>
+                  <path d="M1 11h26" stroke="rgba(255,255,255,.4)" stroke-width="1.4"/>
+                  <path d="M14 2L2 8h24L14 2Z" stroke="rgba(255,255,255,.4)" stroke-width="1.4" stroke-linejoin="round"/>
+                  <rect x="5" y="13" width="4" height="3" rx="1" fill="rgba(255,255,255,.3)"/>
+                  <rect x="12" y="13" width="4" height="3" rx="1" fill="rgba(255,255,255,.3)"/>
+                  <rect x="19" y="13" width="4" height="3" rx="1" fill="rgba(255,255,255,.3)"/>
+                </svg>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- PayTM -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left"><div class="pm-card-name">PayTM</div></div>
+              <div class="pm-card-right">
+                <span class="logo-paytm">paytm</span>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Tarjeta -->
+            <div class="pm-card" id="pm-card2" onclick="toggleCard2()">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Credit or<br>debit card</div>
+              </div>
+              <div class="pm-card-right">
+                <div class="pm-logos">
+                  <div class="logo-visa">VISA</div>
+                  <div class="logo-mc"><div class="mc1"></div><div class="mc2"></div></div>
+                  <div class="logo-rupay">RuPay</div>
+                </div>
+                <button class="plus-btn" id="plus-card2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card form -->
+            <div class="card-form" id="card-form2">
+              <div class="cf-topbar">
+                <div class="cf-topbar-left"><div class="cf-dot"></div>Yuno Secure Fields · iframe</div>
+                <div class="cf-topbar-right">yuno</div>
+              </div>
+              <div class="cf-body">
+                <div class="vcard">
+                  <div class="vc-chip"></div>
+                  <div class="vc-num" id="vn2">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+                  <div class="vc-bottom">
+                    <div>
+                      <div class="vc-holder-l">Cardholder</div>
+                      <div class="vc-holder-v" id="vh2">NAME</div>
+                    </div>
+                    <div>
+                      <div class="vc-exp-l">Valid thru</div>
+                      <div class="vc-exp-v" id="ve2">MM/YY</div>
+                    </div>
+                  </div>
+                  <div class="vc-network"><div class="vcmc1"></div><div class="vcmc2"></div></div>
+                </div>
+                <div class="fi">
+                  <label class="fi-label">Card number</label>
+                  <input class="fi-input" type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtNum(this,'vn2')">
+                </div>
+                <div class="fi">
+                  <label class="fi-label">Cardholder name</label>
+                  <input class="fi-input" type="text" placeholder="As shown on card" oninput="document.getElementById('vh2').textContent=this.value.toUpperCase()||'NAME'">
+                </div>
+                <div class="fi-row">
+                  <div class="fi">
+                    <label class="fi-label">Expiry date</label>
+                    <input class="fi-input" type="text" placeholder="MM/YY" maxlength="5" oninput="fmtExp(this,'ve2')">
+                  </div>
+                  <div class="fi">
+                    <label class="fi-label">CVV</label>
+                    <input class="fi-input" type="password" placeholder="•••" maxlength="4">
+                  </div>
+                </div>
+                <div class="fi-pci">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  Secured by Yuno · PCI DSS Level 1
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="totals" style="margin-top:8px;">
+          <div class="totals-row"><span class="tl">Subtotal</span><span class="tv">$442.00</span></div>
+          <div class="totals-row"><span class="tl">Service fee</span><span class="tv">$6.00</span></div>
+          <div class="totals-row grand"><span class="tl">Total</span><span class="tv">$448.00</span></div>
+        </div>
+
+        <div class="pay-area">
+          <button class="pay-btn" onclick="startProcessing('phone2')">Pay $448.00</button>
+        </div>
+
+      </div>
+
+      <!-- ── UPI PIN Overlay (India 3DS) ── -->
+      <div class="tds-screen upi-pin-screen" id="tds-phone2">
+        <div class="tds-topbar">
+          <div class="cf-dot"></div>
+          #yuno-action-form · yuno.continuePayment()
+        </div>
+
+        <div style="padding:18px 20px 10px; text-align:center;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">
+            <span class="upi-pill" style="font-size:12px;padding:4px 8px;">UPI</span>
+            <span style="font-size:12px;font-weight:600;color:rgba(255,255,255,.5);">Secure payment</span>
+          </div>
+          <div class="upi-merchant-card">
+            <div class="upi-amount">$448.00</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:2px;letter-spacing:.5px;">MXN</div>
+            <div style="width:32px;height:1px;background:rgba(255,255,255,.08);margin:10px auto;"></div>
+            <div style="font-size:13px;font-weight:700;color:white;">Cinépolis Go</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;">pagos@cinepolis.com.mx</div>
+          </div>
+        </div>
+
+        <div class="upi-pin-dots">
+          <div class="upi-dot" id="d2_0"></div>
+          <div class="upi-dot" id="d2_1"></div>
+          <div class="upi-dot" id="d2_2"></div>
+          <div class="upi-dot" id="d2_3"></div>
+          <div class="upi-dot" id="d2_4"></div>
+          <div class="upi-dot" id="d2_5"></div>
+        </div>
+        <p class="upi-pin-hint">Enter your UPI PIN</p>
+
+        <div class="upi-numpad">
+          <button class="upi-key" onclick="upiPin('phone2','1')">1</button>
+          <button class="upi-key" onclick="upiPin('phone2','2')">2</button>
+          <button class="upi-key" onclick="upiPin('phone2','3')">3</button>
+          <button class="upi-key" onclick="upiPin('phone2','4')">4</button>
+          <button class="upi-key" onclick="upiPin('phone2','5')">5</button>
+          <button class="upi-key" onclick="upiPin('phone2','6')">6</button>
+          <button class="upi-key" onclick="upiPin('phone2','7')">7</button>
+          <button class="upi-key" onclick="upiPin('phone2','8')">8</button>
+          <button class="upi-key" onclick="upiPin('phone2','9')">9</button>
+          <button class="upi-key delete" onclick="upiDel('phone2')">⌫</button>
+          <button class="upi-key zero" onclick="upiPin('phone2','0')">0</button>
+          <button class="upi-key action" onclick="submit3DS('phone2')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Success Overlay (phone 2) ── -->
+      <div class="p1-success" id="suc-phone2">
+        <div class="success-screen show">
+          <div class="success-glow">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="suc-title">Payment approved!</div>
+          <div class="suc-sub">Your ticket is confirmed.<br>Enjoy the movie!</div>
+          <div class="ticket">
+            <div class="tkt-header">
+              <img class="tkt-poster" src="mario-poster.png" alt="Super Mario Galaxy">
+              <div>
+                <div class="tkt-movie">Super Mario Galaxy:<br>The Movie</div>
+                <div class="tkt-info">IMAX · Mumbai · Sun Apr 20</div>
+              </div>
+            </div>
+            <div class="tkt-row"><span class="tl">Seats</span><span class="tv">G8 · G9</span></div>
+            <div class="tkt-row"><span class="tl">Show time</span><span class="tv">2:20 PM</span></div>
+            <div class="tkt-row"><span class="tl">Screen</span><span class="tv">Screen 1 IMAX</span></div>
+            <div class="tkt-perforation">
+              <div class="tkt-perf-circle"></div>
+              <div class="tkt-perf-line"></div>
+              <div class="tkt-perf-circle"></div>
+            </div>
+            <div class="tkt-row"><span class="tl">Order</span><span class="tv" style="font-size:11px;color:var(--muted)">#CP-20260420-3892</span></div>
+            <div class="tkt-row"><span class="tl">Amount paid</span><span class="tv" style="color:#4ade80">$448.00 MXN</span></div>
+            <div class="tkt-row"><span class="tl">Via</span><span class="tv" style="font-size:12px;">UPI · •••••34</span></div>
+            <div class="barcode-wrap">
+              <div class="barcode" id="bc2"></div>
+              <div class="bc-num">2026 0420 3892 00</div>
+            </div>
+          </div>
+          <div class="suc-btns">
+            <button class="btn-green-full">View digital ticket</button>
+            <button class="btn-ghost-full" onclick="resetPhone('phone2')">Back to home</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-label" style="max-width:280px; text-align:left;">
+      <div class="col-tag default" style="margin-bottom:10px;">Pantalla 2 · India</div>
+      <h3 style="font-size:15px; margin-bottom:10px;">Misma integración, métodos locales</h3>
+      <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; margin-bottom:14px;">
+        Solo cambiando <code>countryCode: 'IN'</code>, el SDK Lite devuelve automáticamente los métodos disponibles para India — sin cambiar una línea de lógica de negocio.
+      </p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#4ade80; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">UPI e Net Banking</strong> — métodos dominantes en India, procesados por Razorpay, BillDesk o PayU India según la configuración en el Dashboard.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">RuPay</strong> — red de tarjetas doméstica de India, habilitada junto con Visa y Mastercard sin código adicional.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">Un solo SDK, múltiples países</strong> — la misma llamada <code>mountCheckoutLite()</code> sirve México, India y cualquier otro mercado configurado.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow-sep">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1c2535" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </div>
+
+  <!-- ════════════════════ PHONE 3: España ════════════════════ -->
+  <div class="phone-col">
+    <div class="country-badge"><span>🇪🇸</span> España</div>
+    <div class="phone" id="phone3">
+      <div class="dynamic-island"></div>
+      <div class="sbar">
+        <span>12:27</span>
+        <div class="sbar-icons">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 10.5a1.5 1.5 0 110 .01L8 10.5z"/><path d="M4.5 7.5Q8 4.5 11.5 7.5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M2 5Q8 0 14 5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5"/></svg>
+          <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="3" stroke="white" stroke-width="1"/><rect x="2" y="2" width="13" height="8" rx="2" fill="white"/><path d="M20 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <div class="movie-header">
+        <div class="mh-bg"></div>
+        <div class="mh-stars" id="stars3"></div>
+        <div class="mh-nav">
+          <button class="nav-back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="nav-ttl">Pago</span>
+          <div class="nav-ava">SM</div>
+        </div>
+        <div class="mh-content">
+          <div class="mh-step">Paso 4 de 4</div>
+          <div class="mh-movie">Super Mario Galaxy: La Película</div>
+          <div class="mh-cinema">Madrid</div>
+          <div class="mh-details">20 Abril &nbsp;|&nbsp; 2:20 PM &nbsp;|&nbsp; Sala 1</div>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <div class="section">
+          <div class="section-title">Datos personales</div>
+          <div class="dp-field">
+            <div class="dp-label">Nombre(s)</div>
+            <div class="dp-value">Saman</div>
+          </div>
+          <div class="dp-field">
+            <div class="dp-label">Apellido(s)</div>
+            <div class="dp-value">Mortazavi Camacho</div>
+          </div>
+          <div class="dp-field" style="margin-bottom:0">
+            <div class="dp-label">Correo electrónico</div>
+            <div class="dp-value">saman.mor.cam@gmail.com</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Pagar con puntos</div>
+          <img src="club-cinepolis-final.png" alt="CLUB cinépolis" style="max-width:100%; height:auto; display:block; margin-top:2px;">
+        </div>
+
+        <div class="section" style="border-bottom:none; padding-bottom:0;">
+          <div class="section-title">Métodos de pago</div>
+          <div class="sdk-annotation">#yuno-payment-form · yuno.mountCheckoutLite()</div>
+
+          <div id="yuno-payment-form-3">
+
+            <!-- Apple Pay -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left"><div class="pm-card-name">Apple Pay</div></div>
+              <div class="pm-card-right">
+                <svg height="20" viewBox="0 0 56 20" fill="none">
+                  <path d="M16 1.5C16 1.5 14.3 2.8 14 5C15.2 5.1 17 3.9 17 1.8C17 1.6 16.5 1.5 16 1.5Z" fill="white"/>
+                  <path d="M14 5.5C13 5.5 12.2 6.1 11.3 6.1C10.3 6.1 9.4 5.5 8.2 5.5C6.3 5.5 4.5 7.2 4.5 10C4.5 13.8 7.3 18.5 9.5 18.5C10.4 18.5 10.9 17.9 12 17.9C13.1 17.9 13.5 18.5 14.5 18.5C16.7 18.5 19.5 13.8 19.5 10C19.5 7.2 17.6 5.5 16 5.5C15.1 5.5 14.6 6.1 14 5.5Z" fill="white"/>
+                  <text x="23" y="15.5" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13" font-weight="500" letter-spacing="-.3">Pay</text>
+                </svg>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <!-- Bizum -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Bizum</div>
+                <div class="pm-card-sub">Pago instantáneo con móvil</div>
+              </div>
+              <div class="pm-card-right">
+                <span class="logo-bizum">bizum</span>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <!-- SEPA Direct Debit -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">SEPA Direct Debit</div>
+                <div class="pm-card-sub">Débito bancario europeo</div>
+              </div>
+              <div class="pm-card-right">
+                <svg height="20" viewBox="0 0 44 20" fill="none">
+                  <rect x="0" y="3" width="20" height="14" rx="3" stroke="rgba(255,255,255,.35)" stroke-width="1.3"/>
+                  <rect x="0" y="7" width="20" height="4" fill="rgba(255,255,255,.15)"/>
+                  <text x="24" y="15" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="rgba(255,255,255,.5)" letter-spacing=".5">EU</text>
+                </svg>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <!-- Klarna -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Klarna</div>
+                <div class="pm-card-sub">Paga en 3 plazos sin interés</div>
+              </div>
+              <div class="pm-card-right">
+                <span class="logo-klarna">klarna</span>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <!-- Sequra -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left">
+                <div class="pm-card-name">SeQura</div>
+                <div class="pm-card-sub">Fracciona sin tarjeta</div>
+              </div>
+              <div class="pm-card-right">
+                <span class="logo-sequra">SeQura</span>
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <!-- PayPal -->
+            <div class="pm-card" onclick="selectPM(this)">
+              <div class="pm-card-left"><div class="pm-card-name">PayPal</div></div>
+              <div class="pm-card-right">
+                <img src="paypal-logo.png" alt="PayPal" style="height:20px; display:block;">
+                <button class="plus-btn" onclick="selectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <!-- Tarjeta -->
+            <div class="pm-card" id="pm-card3" onclick="toggleCard3()">
+              <div class="pm-card-left">
+                <div class="pm-card-name">Tarjeta de<br>crédito o débito</div>
+              </div>
+              <div class="pm-card-right">
+                <div class="pm-logos">
+                  <div class="logo-amex">AMERICAN<br>EXPRESS</div>
+                  <div class="logo-visa">VISA</div>
+                  <div class="logo-mc"><div class="mc1"></div><div class="mc2"></div></div>
+                </div>
+                <button class="plus-btn" id="plus-card3"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+              </div>
+            </div>
+
+            <div class="card-form" id="card-form3">
+              <div class="cf-topbar">
+                <div class="cf-topbar-left"><div class="cf-dot"></div>Yuno Secure Fields · iframe</div>
+                <div class="cf-topbar-right">yuno</div>
+              </div>
+              <div class="cf-body">
+                <div class="vcard">
+                  <div class="vc-chip"></div>
+                  <div class="vc-num" id="vn3">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+                  <div class="vc-bottom">
+                    <div>
+                      <div class="vc-holder-l">Titular</div>
+                      <div class="vc-holder-v" id="vh3">NOMBRE</div>
+                    </div>
+                    <div>
+                      <div class="vc-exp-l">Válido hasta</div>
+                      <div class="vc-exp-v" id="ve3">MM/AA</div>
+                    </div>
+                  </div>
+                  <div class="vc-network"><div class="vcmc1"></div><div class="vcmc2"></div></div>
+                </div>
+                <div class="fi"><label class="fi-label">Número de tarjeta</label><input class="fi-input" type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtNum(this,'vn3')"></div>
+                <div class="fi"><label class="fi-label">Nombre del titular</label><input class="fi-input" type="text" placeholder="Como aparece en la tarjeta" oninput="document.getElementById('vh3').textContent=this.value.toUpperCase()||'NOMBRE'"></div>
+                <div class="fi-row">
+                  <div class="fi"><label class="fi-label">Vigencia</label><input class="fi-input" type="text" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this,'ve3')"></div>
+                  <div class="fi"><label class="fi-label">CVV</label><input class="fi-input" type="password" placeholder="•••" maxlength="4"></div>
+                </div>
+                <div class="fi-pci">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                  Cifrado por Yuno · PCI DSS Nivel 1
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="totals" style="margin-top:8px;">
+          <div class="totals-row"><span class="tl">Subtotal</span><span class="tv">$442.00</span></div>
+          <div class="totals-row"><span class="tl">Cargo por servicio</span><span class="tv">$6.00</span></div>
+          <div class="totals-row grand"><span class="tl">Total</span><span class="tv">$448.00</span></div>
+        </div>
+        <div class="pay-area">
+          <button class="pay-btn" onclick="startProcessing('phone3')">Pagar $448.00</button>
+        </div>
+
+      </div>
+
+      <!-- ── SCA / PSD2 Overlay (España) ── -->
+      <div class="tds-screen sca-screen" id="tds-phone3">
+        <div class="tds-topbar">
+          <div class="cf-dot"></div>
+          #yuno-action-form · yuno.continuePayment()
+        </div>
+        <div class="sca-bank-header">
+          <div class="sca-bank-name">
+            <svg width="12" height="16" viewBox="0 0 12 16" fill="white"><path d="M6 0C6 0 1 5.5 1 10a5 5 0 0010 0C11 5.5 6 0 6 0z"/></svg>
+            Santander
+          </div>
+          <span class="sca-psd2-badge">PSD2 · SCA</span>
+        </div>
+        <div class="sca-body">
+          <div class="sca-steps">
+            <div class="sca-step done">
+              <div class="sca-step-dot">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+              </div>
+              <div class="sca-step-label">Contraseña</div>
+            </div>
+            <div class="sca-step-line"></div>
+            <div class="sca-step active">
+              <div class="sca-step-dot">2</div>
+              <div class="sca-step-label">Código SMS</div>
+            </div>
+          </div>
+          <div class="sca-title">Autenticación Fuerte de Cliente (SCA)</div>
+          <p class="sca-msg">La normativa europea <strong>PSD2</strong> exige verificar tu identidad en 2 pasos. Has completado el paso 1. Introduce el código enviado a tu móvil.</p>
+          <div class="sca-hint">Código de 6 dígitos enviado al número terminado en <strong>••34</strong></div>
+          <div class="tds-otp-row">
+            <input class="tds-otp tds-otp-p3" maxlength="1" type="text" inputmode="numeric">
+            <input class="tds-otp tds-otp-p3" maxlength="1" type="text" inputmode="numeric">
+            <input class="tds-otp tds-otp-p3" maxlength="1" type="text" inputmode="numeric">
+            <input class="tds-otp tds-otp-p3" maxlength="1" type="text" inputmode="numeric">
+            <input class="tds-otp tds-otp-p3" maxlength="1" type="text" inputmode="numeric">
+            <input class="tds-otp tds-otp-p3" maxlength="1" type="text" inputmode="numeric">
+          </div>
+          <p class="tds-resend" style="color:#aaa;">¿No recibiste el código? <span style="color:#EC0000;cursor:pointer;font-weight:600;">Reenviar</span></p>
+          <button class="sca-verify-btn" onclick="submit3DS('phone3')">Verificar</button>
+          <div class="sca-footer">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Redsys · Servicio de pagos seguros en Europa
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Success Overlay (phone 3) ── -->
+      <div class="p1-success" id="suc-phone3">
+        <div class="success-screen show">
+          <div class="success-glow">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <div class="suc-title">¡Pago aprobado!</div>
+          <div class="suc-sub">Tu entrada está confirmada.<br>¡Disfruta la película!</div>
+          <div class="ticket">
+            <div class="tkt-header">
+              <img class="tkt-poster" src="mario-poster.png" alt="Super Mario Galaxy">
+              <div>
+                <div class="tkt-movie">Super Mario Galaxy:<br>La Película</div>
+                <div class="tkt-info">IMAX · Madrid · Dom 20/04</div>
+              </div>
+            </div>
+            <div class="tkt-row"><span class="tl">Asientos</span><span class="tv">G8 · G9</span></div>
+            <div class="tkt-row"><span class="tl">Función</span><span class="tv">2:20 PM</span></div>
+            <div class="tkt-row"><span class="tl">Sala</span><span class="tv">Sala 1 IMAX</span></div>
+            <div class="tkt-perforation">
+              <div class="tkt-perf-circle"></div>
+              <div class="tkt-perf-line"></div>
+              <div class="tkt-perf-circle"></div>
+            </div>
+            <div class="tkt-row"><span class="tl">Pedido</span><span class="tv" style="font-size:11px;color:var(--muted)">#CP-20260420-3893</span></div>
+            <div class="tkt-row"><span class="tl">Total pagado</span><span class="tv" style="color:#4ade80">$448.00 MXN</span></div>
+            <div class="tkt-row"><span class="tl">Vía</span><span class="tv" style="font-size:12px;">•••• 9012 · Visa</span></div>
+            <div class="barcode-wrap">
+              <div class="barcode" id="bc3"></div>
+              <div class="bc-num">2026 0420 3893 00</div>
+            </div>
+          </div>
+          <div class="suc-btns">
+            <button class="btn-green-full">Ver entrada digital</button>
+            <button class="btn-ghost-full" onclick="resetPhone('phone3')">Volver al inicio</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-label" style="max-width:280px; text-align:left;">
+      <div class="col-tag default" style="margin-bottom:10px;">Pantalla 3 · España</div>
+      <h3 style="font-size:15px; margin-bottom:10px;">SCA obligatoria en Europa</h3>
+      <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; margin-bottom:14px;">
+        Solo cambiando <code>countryCode: 'ES'</code>, el SDK Lite activa los métodos europeos y gestiona automáticamente la <strong style="color:rgba(255,255,255,.7)">SCA de PSD2</strong> — sin ningún código adicional de Cinépolis.
+      </p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#4ade80; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">PSD2 · SCA automática</strong> — la autenticación fuerte de 2 factores es obligatoria en la UE. El SDK orquesta el flujo (contraseña + OTP) sin intervención del merchant.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">Bizum y SEPA</strong> — métodos dominantes en España, procesados por Redsys, Adyen o Stripe según la configuración del Dashboard.
+          </p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
+            <strong style="color:rgba(255,255,255,.7);">BNPL local</strong> — Klarna y SeQura habilitados con un toggle en el Dashboard, sin integración adicional.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── Stars ──
+  document.querySelectorAll('.mh-stars').forEach(c => {
+    for (let i = 0; i < 45; i++) {
+      const s = document.createElement('div')
+      s.className = 'star'
+      const sz = Math.random() * 1.8 + .8
+      s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${.3+Math.random()*.5}`
+      c.appendChild(s)
+    }
+  })
+
+  // barcodes generated on demand in submit3DS
+
+  // ── Toggle card form ──
+  let cardOpen = false
+  function toggleCard() {
+    cardOpen = !cardOpen
+    const form = document.getElementById('card-form1')
+    const btn  = document.getElementById('plus-card1')
+    const card = document.getElementById('pm-card')
+    form.classList.toggle('open', cardOpen)
+    card.classList.toggle('selected', cardOpen)
+    btn.classList.toggle('open', cardOpen)
+    btn.innerHTML = cardOpen
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="#6B9FFF" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`
+    if (cardOpen)
+      setTimeout(() => form.scrollIntoView({ behavior:'smooth', block:'nearest' }), 80)
+  }
+
+  function selectPM(el) {
+    if (cardOpen) toggleCard()
+    document.querySelectorAll('#yuno-payment-form .pm-card').forEach(c => c.classList.remove('selected'))
+    el.classList.add('selected')
+  }
+
+  // ── Card formatting ──
+  function fmtNum(el, targetId) {
+    let v = el.value.replace(/\D/g,'').slice(0,16)
+    el.value = v.match(/.{1,4}/g)?.join(' ') || v
+    document.getElementById(targetId).textContent =
+      v.padEnd(16,'•').match(/.{1,4}/g).join('\u00A0')
+  }
+  function fmtExp(el, targetId) {
+    let v = el.value.replace(/\D/g,'')
+    if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2,4)
+    el.value = v
+    document.getElementById(targetId).textContent = v || 'MM/AA'
+  }
+
+  // ── 3DS Payment Flow ──
+  function startProcessing(phoneId) {
+    const phone = document.getElementById(phoneId)
+
+    // Step 1: OTT spinner
+    const ov = document.createElement('div')
+    ov.className = 'proc-overlay'
+    ov.innerHTML = `<div class="proc-ring"></div><div class="proc-t">Generando token…</div><div class="proc-s">Yuno SDK · One Time Token</div>`
+    phone.appendChild(ov)
+
+    setTimeout(() => {
+      ov.remove()
+      // Step 2: 3DS challenge
+      const tds = document.getElementById('tds-' + phoneId)
+      tds.classList.add('show')
+      tds.querySelector('.tds-otp').focus()
+    }, 1400)
+  }
+
+  function submit3DS(phoneId) {
+    const phone = document.getElementById(phoneId)
+    const tds = document.getElementById('tds-' + phoneId)
+
+    // Step 3: auth spinner over 3DS
+    const ov = document.createElement('div')
+    ov.className = 'proc-overlay'
+    ov.style.zIndex = '250'
+    ov.innerHTML = `<div class="proc-ring"></div><div class="proc-t">Autenticando…</div><div class="proc-s">3D Secure · Verificando identidad</div>`
+    phone.appendChild(ov)
+
+    setTimeout(() => {
+      ov.remove()
+      tds.classList.remove('show')
+      // Step 4: success
+      const suc = document.getElementById('suc-' + phoneId)
+      suc.classList.add('show')
+      // generate barcode
+      const bcId = phoneId === 'phone1' ? 'bc1' : phoneId === 'phone2' ? 'bc2' : 'bc3'
+      const bcEl = document.getElementById(bcId)
+      if (bcEl && !bcEl.children.length) {
+        for (let i = 0; i < 60; i++) {
+          const b = document.createElement('div')
+          b.className = 'bar'
+          const h = 14 + Math.random() * 18
+          b.style.cssText = `height:${h}px;width:${Math.random() > .4 ? 3 : 2}px;`
+          bcEl.appendChild(b)
+        }
+      }
+    }, 1800)
+  }
+
+  // OTP auto-advance (phones 1 and 3)
+  ;['#tds-phone1 .tds-otp', '#tds-phone2 .tds-otp-p2', '#tds-phone3 .tds-otp-p3'].forEach(sel => {
+    document.querySelectorAll(sel).forEach((inp, i, all) => {
+      inp.addEventListener('input', () => {
+        inp.value = inp.value.replace(/\D/g, '')
+        inp.classList.toggle('filled', inp.value.length > 0)
+        if (inp.value && i < all.length - 1) all[i + 1].focus()
+      })
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !inp.value && i > 0) all[i - 1].focus()
+      })
+    })
+  })
+
+  // Toggle card form — phone 2
+  let card2Open = false
+  function toggleCard2() {
+    card2Open = !card2Open
+    document.getElementById('card-form2').classList.toggle('open', card2Open)
+    document.getElementById('plus-card2').classList.toggle('open', card2Open)
+    document.getElementById('pm-card2').classList.toggle('selected', card2Open)
+  }
+
+  // Toggle card form — phone 3
+  let card3Open = false
+  function toggleCard3() {
+    card3Open = !card3Open
+    document.getElementById('card-form3').classList.toggle('open', card3Open)
+    document.getElementById('plus-card3').classList.toggle('open', card3Open)
+    document.getElementById('pm-card3').classList.toggle('selected', card3Open)
+  }
+
+  // ── UPI PIN pad ──
+  const upiState = {}
+  function upiPin(phoneId, digit) {
+    if (!upiState[phoneId]) upiState[phoneId] = ''
+    if (upiState[phoneId].length >= 6) return
+    upiState[phoneId] += digit
+    updateUpiDots(phoneId)
+    if (upiState[phoneId].length === 6) setTimeout(() => submit3DS(phoneId), 350)
+  }
+  function upiDel(phoneId) {
+    if (!upiState[phoneId]) return
+    upiState[phoneId] = upiState[phoneId].slice(0, -1)
+    updateUpiDots(phoneId)
+  }
+  function updateUpiDots(phoneId) {
+    const len = (upiState[phoneId] || '').length
+    for (let i = 0; i < 6; i++) {
+      const d = document.getElementById(`d2_${i}`)
+      if (d) d.classList.toggle('filled', i < len)
+    }
+  }
+
+  // ── Reset phone to initial state ──
+  function resetPhone(phoneId) {
+    document.getElementById('suc-' + phoneId)?.classList.remove('show')
+    document.getElementById('tds-' + phoneId)?.classList.remove('show')
+    // clear OTP inputs
+    document.querySelectorAll('#tds-' + phoneId + ' .tds-otp').forEach(inp => {
+      inp.value = ''; inp.classList.remove('filled')
+    })
+    // clear UPI PIN
+    if (upiState[phoneId]) { upiState[phoneId] = ''; updateUpiDots(phoneId) }
+    // clear barcode so it regenerates fresh next time
+    const bcId = phoneId === 'phone1' ? 'bc1' : 'bc2'
+    const bcEl = document.getElementById(bcId)
+    if (bcEl) bcEl.innerHTML = ''
+    // scroll checkout back to top
+    const pc = document.querySelector('#' + phoneId + ' .page-content')
+    if (pc) pc.scrollTop = 0
+  }
+</script>
+</body>
+</html>

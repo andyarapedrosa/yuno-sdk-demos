@@ -1,0 +1,9 @@
+# Intermediate image processing files
+cinepolis-yuno-checkout/c2p-raw.png
+cinepolis-yuno-checkout/club-cinepolis-nobg.png
+cinepolis-yuno-checkout/club-cinepolis-trim.png
+cinepolis-yuno-checkout/club-cinepolis.png
+cinepolis-yuno-checkout/paypal-raw.png
+
+# OS
+.DS_Store
