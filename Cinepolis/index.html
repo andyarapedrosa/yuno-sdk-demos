@@ -2628,9 +2628,9 @@
     {
       num: 3, layer: 'Merchant Server', lc: '#06B6D4',
       title: 'Listar Métodos de Pago',
-      desc: 'El servidor consulta a Yuno los <strong>métodos de pago disponibles</strong> para el país, moneda y cliente. El resultado determina lo que el SDK renderizará — sin configuración manual.',
-      method: 'GET', ep: '/v1/payment-methods',
-      code: 'curl --request GET \\\n  --url \'https://api-sandbox.y.uno/v1/payment-methods\\\n         ?country=MX&currency=MXN\' \\\n  --header \'public-api-key: pk_sandbox_...\'\n\n<span class="c">// Yuno returns methods enabled in the Dashboard:</span>\n<span class="c">// CARD, APPLE_PAY, CLICK_TO_PAY, APLAZO, PAYPAL</span>'
+      desc: 'El servidor consulta a Yuno los <strong>métodos de pago disponibles</strong> para la sesión de checkout (país, moneda, cuenta y reglas de enrutamiento). Esta lista define qué métodos el merchant muestra en su UI y cuáles puede montar luego con <strong>mountCheckoutLite({ paymentMethodType })</strong>.',
+      method: 'GET', ep: '/v1/checkout/sessions/{checkout_session}/payment-methods',
+      code: 'curl --request GET \\\n  --url "https://api-sandbox.y.uno/v1/checkout/sessions/\\\n         cs_xY9qLm3R7pNk8vHb2dWe5fZa/payment-methods" \\\n  --header \'public-api-key: pk_sandbox_...\' \\\n  --header \'private-secret-key: sk_sandbox_...\''
     },
     {
       num: 4, layer: 'Yuno SDK', lc: '#2B63D9',
