@@ -2011,5 +2011,630 @@
     if (pc) pc.scrollTop = 0
   }
 </script>
+
+<!-- ════════════════════ WALKTHROUGH STYLES ════════════════════ -->
+<style>
+  /* ─── Section shell ─── */
+  .wt-section {
+    background: #020609;
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 80px 40px 100px;
+  }
+
+  /* ─── Header ─── */
+  .wt-header { text-align: center; margin-bottom: 56px; }
+  .wt-header-label {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(124,58,237,.1); border: 1px solid rgba(124,58,237,.3);
+    color: #A78BFA; font-size: 11px; font-weight: 700;
+    letter-spacing: .6px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 100px; margin-bottom: 16px;
+  }
+  .wt-header-label-dot { width: 6px; height: 6px; border-radius: 50%; background: #7C3AED; }
+  .wt-title { font-size: 30px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 10px; line-height: 1.2; }
+  .wt-title em { font-style: normal; color: #A78BFA; }
+  .wt-sub { font-size: 14px; color: rgba(255,255,255,.4); max-width: 480px; margin: 0 auto; line-height: 1.65; }
+
+  /* ─── Two-column body ─── */
+  .wt-body {
+    display: flex; align-items: flex-start; gap: 52px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .wt-phone-wrap { flex-shrink: 0; }
+
+  /* ─── Doc panel ─── */
+  .wt-doc-panel { flex: 1; min-width: 0; position: sticky; top: 28px; }
+
+  /* ─── Step trail ─── */
+  .wt-trail { display: flex; align-items: center; margin-bottom: 24px; }
+  .wt-trail-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: rgba(255,255,255,.22);
+    flex-shrink: 0; cursor: pointer; transition: all .25s;
+  }
+  .wt-trail-dot:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.5); }
+  .wt-trail-dot.done { background: rgba(124,58,237,.18); border-color: rgba(124,58,237,.4); color: #A78BFA; }
+  .wt-trail-dot.active {
+    background: #7C3AED; border-color: #7C3AED; color: white;
+    box-shadow: 0 0 0 4px rgba(124,58,237,.2);
+  }
+  .wt-trail-line { flex: 1; height: 1.5px; background: rgba(255,255,255,.05); transition: background .3s; }
+  .wt-trail-line.done { background: rgba(124,58,237,.35); }
+
+  /* ─── Step card ─── */
+  .wt-card {
+    background: #0C1929; border: 1px solid rgba(255,255,255,.07);
+    border-radius: 20px; overflow: hidden;
+    transition: opacity .22s ease, transform .22s ease;
+  }
+  .wt-card.fade { opacity: 0; transform: translateY(10px); }
+
+  .wt-card-top {
+    padding: 22px 22px 18px; border-bottom: 1px solid rgba(255,255,255,.05);
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .wt-step-circle {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; flex-shrink: 0;
+  }
+  .wt-card-meta { flex: 1; min-width: 0; }
+  .wt-layer-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 100px; margin-bottom: 7px;
+  }
+  .wt-layer-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .wt-card-title { font-size: 19px; font-weight: 800; letter-spacing: -.3px; line-height: 1.2; }
+
+  .wt-card-desc {
+    padding: 18px 22px; font-size: 13px; color: rgba(255,255,255,.5);
+    line-height: 1.7; border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .wt-card-desc strong { color: rgba(255,255,255,.8); font-weight: 600; }
+
+  /* ─── Code block ─── */
+  .wt-code-block { background: #06101E; }
+  .wt-code-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .wt-code-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; color: rgba(255,255,255,.28);
+    letter-spacing: .2px; font-family: 'Menlo','Monaco','Courier New',monospace;
+  }
+  .wt-code-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .wt-method {
+    font-size: 10px; font-weight: 700; letter-spacing: .4px;
+    padding: 2px 9px; border-radius: 6px;
+  }
+  .wt-method.POST { background: rgba(34,197,94,.12); color: #4ade80; }
+  .wt-method.GET  { background: rgba(96,165,250,.12); color: #93C5FD; }
+  .wt-method.SDK  { background: rgba(124,58,237,.12); color: #C4B5FD; }
+  .wt-method.CB   { background: rgba(251,191,36,.1);  color: #FCD34D; }
+
+  .wt-code-pre {
+    margin: 0; padding: 14px 16px;
+    font-family: 'Menlo','Monaco','Courier New',monospace;
+    font-size: 11px; line-height: 1.75;
+    color: rgba(255,255,255,.55);
+    overflow-x: auto; white-space: pre;
+  }
+  .wt-code-pre .k { color: #C4B5FD; }
+  .wt-code-pre .s { color: #6EE7B7; }
+  .wt-code-pre .p { color: #93C5FD; }
+  .wt-code-pre .c { color: rgba(255,255,255,.22); font-style: italic; }
+  .wt-code-pre .n { color: #FCD34D; }
+  .wt-code-pre .f { color: #FB923C; }
+
+  /* ─── Controls ─── */
+  .wt-controls {
+    display: flex; align-items: center; gap: 10px; margin-top: 16px;
+  }
+  .wt-btn {
+    height: 34px; padding: 0 16px;
+    border: 1.5px solid rgba(255,255,255,.1); background: transparent;
+    border-radius: 100px; font-size: 12px; font-weight: 600;
+    color: rgba(255,255,255,.45); cursor: pointer; transition: all .15s;
+    font-family: inherit;
+  }
+  .wt-btn:hover:not(:disabled) { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
+  .wt-btn:disabled { opacity: .3; cursor: default; }
+  .wt-btn.wt-primary {
+    background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.4); color: #C4B5FD;
+  }
+  .wt-btn.wt-primary:hover:not(:disabled) {
+    background: rgba(124,58,237,.28); border-color: rgba(124,58,237,.65); color: white;
+  }
+  .wt-counter {
+    flex: 1; text-align: center; font-size: 11px;
+    color: rgba(255,255,255,.22); font-weight: 600; letter-spacing: .3px;
+  }
+
+  @media (max-width: 960px) {
+    .wt-body { flex-direction: column; align-items: center; }
+    .wt-doc-panel { position: static; width: 100%; max-width: 480px; }
+    .wt-section { padding: 60px 20px 80px; }
+  }
+</style>
+
+<!-- ════════════════════ WALKTHROUGH SECTION ════════════════════ -->
+<section class="wt-section">
+
+  <div class="wt-header">
+    <div class="wt-header-label">
+      <div class="wt-header-label-dot"></div>
+      Payment Flow Walkthrough
+    </div>
+    <h2 class="wt-title">Payment without Enrollment<br><em>Under the Hood</em></h2>
+    <p class="wt-sub">Interact with the checkout and watch each step of the Yuno integration unfold — exactly as documented in the API reference.</p>
+  </div>
+
+  <div class="wt-body">
+
+    <!-- ── Phone (replica of Phone 1) ── -->
+    <div class="wt-phone-wrap">
+      <div class="phone" id="wt-phone">
+        <div class="dynamic-island"></div>
+        <div class="sbar">
+          <span>12:25</span>
+          <div class="sbar-icons">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/><rect x="9" y="2" width="3" height="10" rx="1"/><rect x="13" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><path d="M8 10.5a1.5 1.5 0 110 .01L8 10.5z"/><path d="M4.5 7.5Q8 4.5 11.5 7.5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M2 5Q8 0 14 5" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".5"/></svg>
+            <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0.5" y="0.5" width="18" height="11" rx="3" stroke="white" stroke-width="1"/><rect x="2" y="2" width="13" height="8" rx="2" fill="white"/><path d="M20 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="movie-header">
+          <div class="mh-bg"></div>
+          <div class="mh-stars" id="wt-stars"></div>
+          <div class="mh-nav">
+            <button class="nav-back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <span class="nav-ttl">Pago</span>
+            <div class="nav-ava">SM</div>
+          </div>
+          <div class="mh-content">
+            <div class="mh-step">Paso 4 de 4</div>
+            <div class="mh-movie">Super Mario Galaxy: La Película</div>
+            <div class="mh-cinema">Samara</div>
+            <div class="mh-details">20 Abril &nbsp;|&nbsp; 2:20 PM &nbsp;|&nbsp; Sala 1</div>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <div class="section">
+            <div class="section-title">Datos personales</div>
+            <div class="dp-field"><div class="dp-label">Nombre(s)</div><div class="dp-value">Saman</div></div>
+            <div class="dp-field"><div class="dp-label">Apellido(s)</div><div class="dp-value">Mortazavi Camacho</div></div>
+            <div class="dp-field" style="margin-bottom:0"><div class="dp-label">Correo electrónico</div><div class="dp-value">saman.mor.cam@gmail.com</div></div>
+          </div>
+          <div class="section">
+            <div class="section-title">Pagar con puntos</div>
+            <img src="club-cinepolis-final.png" alt="CLUB cinépolis" style="max-width:100%; height:auto; display:block; margin-top:2px;">
+          </div>
+          <div class="section" style="border-bottom:none; padding-bottom:0;">
+            <div class="section-title">Métodos de pago</div>
+            <div class="sdk-annotation">#yuno-payment-form · yuno.mountCheckoutLite()</div>
+            <div id="wt-pf">
+              <!-- Apple Pay -->
+              <div class="pm-card" onclick="wtSelectPM(this)">
+                <div class="pm-card-left"><div class="pm-card-name">Apple Pay</div></div>
+                <div class="pm-card-right">
+                  <svg height="20" viewBox="0 0 56 20" fill="none"><path d="M16 1.5C16 1.5 14.3 2.8 14 5C15.2 5.1 17 3.9 17 1.8C17 1.6 16.5 1.5 16 1.5Z" fill="white"/><path d="M14 5.5C13 5.5 12.2 6.1 11.3 6.1C10.3 6.1 9.4 5.5 8.2 5.5C6.3 5.5 4.5 7.2 4.5 10C4.5 13.8 7.3 18.5 9.5 18.5C10.4 18.5 10.9 17.9 12 17.9C13.1 17.9 13.5 18.5 14.5 18.5C16.7 18.5 19.5 13.8 19.5 10C19.5 7.2 17.6 5.5 16 5.5C15.1 5.5 14.6 6.1 14 5.5Z" fill="white"/><text x="23" y="15.5" fill="white" font-family="-apple-system,sans-serif" font-size="13" font-weight="500">Pay</text></svg>
+                  <button class="plus-btn" onclick="event.stopPropagation(); wtSelectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+                </div>
+              </div>
+              <!-- Tarjeta -->
+              <div class="pm-card" id="wt-pm-card" onclick="wtToggleCard()">
+                <div class="pm-card-left"><div class="pm-card-name">Tarjeta de<br>crédito o débito</div></div>
+                <div class="pm-card-right">
+                  <div class="pm-logos">
+                    <div class="logo-amex">AMERICAN<br>EXPRESS</div>
+                    <div class="logo-visa">VISA</div>
+                    <div class="logo-mc"><div class="mc1"></div><div class="mc2"></div></div>
+                  </div>
+                  <button class="plus-btn" id="wt-plus-card"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+                </div>
+              </div>
+              <!-- Card form -->
+              <div class="card-form" id="wt-card-form">
+                <div class="cf-topbar">
+                  <div class="cf-topbar-left"><div class="cf-dot"></div>Yuno Secure Fields · iframe</div>
+                  <div class="cf-topbar-right">yuno</div>
+                </div>
+                <div class="cf-body">
+                  <div class="vcard">
+                    <div class="vc-chip"></div>
+                    <div class="vc-num" id="wt-vn">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+                    <div class="vc-bottom">
+                      <div><div class="vc-holder-l">Titular</div><div class="vc-holder-v" id="wt-vh">NOMBRE</div></div>
+                      <div><div class="vc-exp-l">Válido hasta</div><div class="vc-exp-v" id="wt-ve">MM/AA</div></div>
+                    </div>
+                    <div class="vc-network"><div class="vcmc1"></div><div class="vcmc2"></div></div>
+                  </div>
+                  <div class="fi"><label class="fi-label">Número de tarjeta</label><input class="fi-input" type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtNum(this,'wt-vn')"></div>
+                  <div class="fi"><label class="fi-label">Nombre del titular</label><input class="fi-input" type="text" placeholder="Como aparece en la tarjeta" oninput="document.getElementById('wt-vh').textContent=this.value.toUpperCase()||'NOMBRE'"></div>
+                  <div class="fi-row">
+                    <div class="fi"><label class="fi-label">Vigencia</label><input class="fi-input" type="text" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this,'wt-ve')"></div>
+                    <div class="fi"><label class="fi-label">CVV</label><input class="fi-input" type="password" placeholder="•••" maxlength="4"></div>
+                  </div>
+                  <div class="fi">
+                    <label class="fi-label">Meses sin intereses</label>
+                    <select class="fi-select"><option>1 MSI — $448.00</option><option>3 MSI — $149.33 / mes</option><option>6 MSI — $74.67 / mes</option><option>12 MSI — $37.33 / mes</option></select>
+                  </div>
+                  <div class="fi-pci"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Cifrado por Yuno · PCI DSS Nivel 1</div>
+                </div>
+              </div>
+              <!-- Click to Pay -->
+              <div class="pm-card" onclick="wtSelectPM(this)">
+                <div class="pm-card-left"><div class="pm-card-name">Click to Pay</div></div>
+                <div class="pm-card-right"><img src="c2p-logo.png" alt="Click to Pay" style="height:20px"><button class="plus-btn" onclick="event.stopPropagation(); wtSelectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+              </div>
+              <!-- Aplazo -->
+              <div class="pm-card" onclick="wtSelectPM(this)">
+                <div class="pm-card-left"><div class="pm-card-name">Aplazo</div><div class="pm-card-sub">Paga en quincenas sin tarjeta</div></div>
+                <div class="pm-card-right"><img src="aplazo-logo.png" alt="aplazo" style="height:20px"><button class="plus-btn" onclick="event.stopPropagation(); wtSelectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+              </div>
+              <!-- PayPal -->
+              <div class="pm-card" onclick="wtSelectPM(this)">
+                <div class="pm-card-left"><div class="pm-card-name">PayPal</div></div>
+                <div class="pm-card-right"><img src="paypal-logo.png" alt="PayPal" style="height:20px"><button class="plus-btn" onclick="event.stopPropagation(); wtSelectPM(this.closest('.pm-card'))"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="totals" style="margin-top:8px;">
+            <div class="totals-row"><span class="tl">Subtotal</span><span class="tv">$442.00</span></div>
+            <div class="totals-row"><span class="tl">Cargo por servicio</span><span class="tv">$6.00</span></div>
+            <div class="totals-row grand"><span class="tl">Total</span><span class="tv">$448.00</span></div>
+          </div>
+          <div class="pay-area">
+            <button class="pay-btn" id="wt-pay-btn" onclick="wtStartProcessing()">Pagar $448.00</button>
+          </div>
+        </div>
+
+        <!-- 3DS overlay -->
+        <div class="tds-screen" id="wt-tds">
+          <div class="tds-topbar"><div class="cf-dot"></div>#yuno-action-form · yuno.continuePayment()</div>
+          <div class="tds-body">
+            <div class="tds-card">
+              <div class="tds-bank-row"><span class="tds-bbva">BBVA</span><span class="tds-3ds-badge">3D Secure</span></div>
+              <div class="tds-lock-row">
+                <svg class="tds-lock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <span class="tds-title">Verificación de seguridad</span>
+              </div>
+              <p class="tds-msg">Tu banco solicita confirmar tu identidad para autorizar el pago de <strong>$448.00 MXN</strong> en Cinépolis Go.</p>
+              <div class="tds-hint">Código de 6 dígitos enviado al número terminado en <strong>••34</strong></div>
+              <div class="tds-otp-row">
+                <input class="tds-otp wt-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+                <input class="tds-otp wt-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+                <input class="tds-otp wt-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+                <input class="tds-otp wt-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+                <input class="tds-otp wt-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+                <input class="tds-otp wt-otp" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+              </div>
+              <p class="tds-resend">¿No recibiste el código? <span>Reenviar</span></p>
+              <button class="tds-verify-btn" onclick="wtSubmit3DS()">Verificar</button>
+            </div>
+            <div class="tds-footer">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Pago protegido por <strong style="color:rgba(255,255,255,.4)">Visa Secure</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success overlay -->
+        <div class="p1-success" id="wt-suc">
+          <div class="success-screen show">
+            <div class="success-glow"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="suc-title">¡Pago aprobado!</div>
+            <div class="suc-sub">Tu entrada está confirmada.<br>¡Disfruta la película!</div>
+            <div class="ticket">
+              <div class="tkt-header">
+                <img class="tkt-poster" src="mario-poster.png" alt="Super Mario Galaxy">
+                <div><div class="tkt-movie">Super Mario Galaxy:<br>La Película</div><div class="tkt-info">IMAX · Samara · Dom 20/04</div></div>
+              </div>
+              <div class="tkt-row"><span class="tl">Asientos</span><span class="tv">G8 · G9</span></div>
+              <div class="tkt-row"><span class="tl">Función</span><span class="tv">2:20 PM</span></div>
+              <div class="tkt-row"><span class="tl">Sala</span><span class="tv">Sala 1 IMAX</span></div>
+              <div class="tkt-perforation"><div class="tkt-perf-circle"></div><div class="tkt-perf-line"></div><div class="tkt-perf-circle"></div></div>
+              <div class="tkt-row"><span class="tl">Pedido</span><span class="tv" style="font-size:11px;color:var(--muted)">#CP-20260420-7723</span></div>
+              <div class="tkt-row"><span class="tl">Total pagado</span><span class="tv" style="color:#4ade80">$448.00 MXN</span></div>
+              <div class="tkt-row"><span class="tl">Vía</span><span class="tv" style="font-size:12px;">•••• 9012 · Visa</span></div>
+              <div class="barcode-wrap"><div class="barcode" id="wt-bc"></div><div class="bc-num">2026 0420 7723 00</div></div>
+            </div>
+            <div class="suc-btns">
+              <button class="btn-green-full">Ver entrada digital</button>
+              <button class="btn-ghost-full" onclick="wtReset()">Volver al inicio</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /wt-phone -->
+    </div><!-- /wt-phone-wrap -->
+
+    <!-- ── Doc panel ── -->
+    <div class="wt-doc-panel">
+      <div class="wt-trail" id="wt-trail"></div>
+      <div class="wt-card" id="wt-card"></div>
+      <div class="wt-controls">
+        <button class="wt-btn" id="wt-prev" onclick="wtNav(-1)">← Anterior</button>
+        <div class="wt-counter" id="wt-counter"></div>
+        <button class="wt-btn wt-primary" id="wt-next" onclick="wtNav(1)">Siguiente →</button>
+      </div>
+    </div>
+
+  </div><!-- /wt-body -->
+</section>
+
+<!-- ════════════════════ WALKTHROUGH SCRIPT ════════════════════ -->
+<script>
+;(function() {
+
+  // ── Step data ──────────────────────────────────────────────────
+  var STEPS = [
+    {
+      num: 1, layer: 'Merchant Server', lc: '#7C3AED',
+      title: 'Create Customer',
+      desc: 'Before checkout begins, the merchant server creates a <strong>customer profile</strong> in Yuno. This enables saved cards, tokenization, and a personalized experience across sessions.',
+      method: 'POST', ep: '/v1/customers',
+      code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/customers \\\n  --header \'content-type: application/json\' \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"country"</span>: <span class="s">"MX"</span>,\n    <span class="p">"merchant_customer_id"</span>: <span class="s">"cine_saman_001"</span>,\n    <span class="p">"first_name"</span>: <span class="s">"Saman"</span>,\n    <span class="p">"last_name"</span>: <span class="s">"Mortazavi"</span>,\n    <span class="p">"email"</span>: <span class="s">"saman.mor.cam@gmail.com"</span>\n  }\''
+    },
+    {
+      num: 2, layer: 'Merchant Server', lc: '#7C3AED',
+      title: 'Create Checkout Session',
+      desc: 'The merchant server requests a <strong>checkout session</strong> from Yuno, binding the order, amount, and customer. Yuno returns a session token used to initialize the SDK client-side.',
+      method: 'POST', ep: '/v1/checkout-sessions',
+      code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/checkout-sessions \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n    <span class="p">"payment_description"</span>: <span class="s">"Super Mario Galaxy IMAX"</span>,\n    <span class="p">"country"</span>: <span class="s">"MX"</span>,\n    <span class="p">"amount"</span>: {\n      <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n      <span class="p">"value"</span>: <span class="n">44800</span>\n    },\n    <span class="p">"customer_id"</span>: <span class="s">"yuno_cust_id"</span>\n  }\''
+    },
+    {
+      num: 3, layer: 'Merchant Server', lc: '#7C3AED',
+      title: 'List Payment Methods',
+      desc: 'The server queries Yuno for <strong>available payment methods</strong> for this country, currency, and customer. The result drives what the SDK will render — no hardcoding required.',
+      method: 'GET', ep: '/v1/payment-methods',
+      code: 'curl --request GET \\\n  --url \'https://api-sandbox.y.uno/v1/payment-methods\\\n         ?country=MX&currency=MXN\' \\\n  --header \'public-api-key: pk_sandbox_...\'\n\n<span class="c">// Yuno returns methods enabled in the Dashboard:</span>\n<span class="c">// CARD, APPLE_PAY, CLICK_TO_PAY, APLAZO, PAYPAL</span>'
+    },
+    {
+      num: 4, layer: 'Yuno SDK', lc: '#2B63D9',
+      title: 'Initiate SDK + mountCheckoutLite()',
+      desc: 'The client initializes the Yuno SDK with the session token. <strong>mountCheckoutLite()</strong> renders the payment method list inline inside <code style="color:#6B9FFF;background:rgba(43,99,217,.1);padding:1px 5px;border-radius:4px">#yuno-payment-form</code> — no modal, no redirect.',
+      method: 'SDK', ep: 'Yuno.initialize() · startCheckout() · mountCheckoutLite()',
+      code: '<span class="k">const</span> yuno = <span class="f">Yuno.initialize</span>(<span class="s">\'pk_sandbox_...\'</span>)\n\nyuno.<span class="f">startCheckout</span>({\n  checkoutSession,\n  <span class="p">countryCode</span>: <span class="s">\'MX\'</span>,\n  <span class="p">language</span>: <span class="s">\'es\'</span>,\n  <span class="p">showPayButton</span>: <span class="k">false</span>,   <span class="c">// custom button</span>\n  <span class="p">renderMode</span>: {\n    <span class="p">type</span>: <span class="s">\'element\'</span>,\n    <span class="p">elementSelector</span>: {\n      <span class="p">apmForm</span>: <span class="s">\'#yuno-payment-form\'</span>,\n      <span class="p">actionForm</span>: <span class="s">\'#yuno-action-form\'</span>\n    }\n  },\n  <span class="p">card</span>: { <span class="p">type</span>: <span class="s">\'extends\'</span>, <span class="p">cardSaveEnable</span>: <span class="k">true</span> }\n})\n\n<span class="k">await</span> yuno.<span class="f">mountCheckoutLite</span>({ <span class="p">paymentMethodType</span>: <span class="s">\'CARD\'</span> })'
+    },
+    {
+      num: 5, layer: 'Yuno SDK', lc: '#2B63D9',
+      title: 'User Selects Payment Method',
+      desc: 'The user picks a payment method. The SDK fires <strong>yunoPaymentMethodSelected</strong>, passing the selected type. The merchant uses this to enable or disable the custom pay button.',
+      method: 'SDK', ep: 'yunoPaymentMethodSelected callback',
+      code: '<span class="c">// Registered inside startCheckout config</span>\n<span class="f">yunoPaymentMethodSelected</span>(data) {\n  console.<span class="f">log</span>(\n    <span class="s">\'[Cinépolis] Método:\'</span>,\n    data.paymentMethodType  <span class="c">// "CARD"</span>\n  )\n\n  <span class="c">// Show / hide the pay button</span>\n  <span class="f">updatePayButton</span>(data.paymentMethodType !== <span class="k">null</span>)\n}'
+    },
+    {
+      num: 6, layer: 'Yuno SDK', lc: '#2B63D9',
+      title: 'Gets One Time Token',
+      desc: 'The merchant calls <strong>submitOneTimeTokenForm()</strong> on button click. The SDK securely tokenizes the card data and returns a <strong>single-use JWT token</strong> via the yunoCreatePayment callback.',
+      method: 'SDK', ep: 'submitOneTimeTokenForm() → yunoCreatePayment()',
+      code: '<span class="c">// Custom pay button triggers SDK tokenization</span>\ndocument.<span class="f">getElementById</span>(<span class="s">\'btn-pay\'</span>)\n  .<span class="f">addEventListener</span>(<span class="s">\'click\'</span>, () => {\n    yuno.<span class="f">submitOneTimeTokenForm</span>()\n  })\n\n<span class="c">// SDK fires this callback with the OTT</span>\n<span class="k">async</span> <span class="f">yunoCreatePayment</span>(oneTimeToken) {\n  <span class="c">// oneTimeToken: single-use JWT, valid for one call</span>\n  <span class="k">await</span> <span class="f">createPaymentOnServer</span>(oneTimeToken)\n}'
+    },
+    {
+      num: 7, layer: 'Merchant Server', lc: '#7C3AED',
+      title: 'Create Payment',
+      desc: 'The merchant server uses the <strong>One Time Token</strong> to call Yuno\'s payments API. Yuno orchestrates the transaction with the selected payment provider (BBVA, Stripe, etc.).',
+      method: 'POST', ep: '/v1/payments',
+      code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/payments \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n    <span class="p">"checkout_session"</span>: <span class="s">"cs_..."</span>,\n    <span class="p">"amount"</span>: {\n      <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n      <span class="p">"value"</span>: <span class="n">44800</span>\n    },\n    <span class="p">"payment_method"</span>: {\n      <span class="p">"token"</span>: <span class="s">"&lt;oneTimeToken&gt;"</span>,\n      <span class="p">"type"</span>: <span class="s">"CARD"</span>\n    }\n  }\''
+    },
+    {
+      num: 8, layer: 'Yuno SDK', lc: '#2B63D9',
+      title: 'Initiate SDK to Continue Payment Flow',
+      desc: 'If the payment requires additional steps (3DS, OTP, redirect), <strong>continuePayment()</strong> instructs the SDK to render the action screen inside <code style="color:#6B9FFF;background:rgba(43,99,217,.1);padding:1px 5px;border-radius:4px">#yuno-action-form</code>.',
+      method: 'SDK', ep: 'yuno.continuePayment()',
+      code: '<span class="c">// Called inside yunoCreatePayment after POST /v1/payments</span>\nyuno.<span class="f">continuePayment</span>({\n  <span class="p">showPaymentStatus</span>: <span class="k">false</span>\n  <span class="c">// Cinépolis shows its own status screen</span>\n})\n\n<span class="c">// SDK automatically handles inside #yuno-action-form:</span>\n<span class="c">// • 3DS challenge iframes (v1 and EMV 3DS v2)</span>\n<span class="c">// • OTP verification screens</span>\n<span class="c">// • Redirect-based flows</span>\n<span class="c">// • Frictionless 3DS (no user interaction)</span>'
+    },
+    {
+      num: 9, layer: 'Payment Provider', lc: '#059669',
+      title: '3DS Challenge at Provider',
+      desc: 'The issuer bank (BBVA) presents a <strong>3D Secure challenge</strong> — a 6-digit OTP sent via SMS. This is rendered inside the SDK\'s action container and handled entirely by the issuer. Zero code from Cinépolis.',
+      method: 'SDK', ep: '#yuno-action-form → 3DS iframe (BBVA)',
+      code: '<span class="c">// The 3DS iframe is injected by the SDK</span>\n<span class="c">// into #yuno-action-form. Cinépolis writes</span>\n<span class="c">// zero code for this screen.</span>\n\n<span class="c">// Yuno SDK supports:</span>\n<span class="c">// ✓ EMV 3DS v2 (frictionless + challenge)</span>\n<span class="c">// ✓ 3DS v1 (legacy fallback)</span>\n<span class="c">// ✓ OTP screens (provider-native)</span>\n<span class="c">// ✓ Redirect-based auth (wallets, BNPL)</span>'
+    },
+    {
+      num: 10, layer: 'Merchant Client', lc: '#D97706',
+      title: 'Display Payment Result',
+      desc: 'Yuno delivers the final status via <strong>webhook</strong> (server-to-server) and the <strong>yunoPaymentResult</strong> callback (client-side). The merchant renders the confirmation screen with the result.',
+      method: 'CB', ep: 'yunoPaymentResult + POST webhook',
+      code: '<span class="c">// Client-side result callback</span>\n<span class="f">yunoPaymentResult</span>(data) {\n  <span class="k">const</span> { status } = data\n  <span class="c">// "APPROVED" | "REJECTED" | "ERROR"</span>\n\n  <span class="k">if</span> (status === <span class="s">\'APPROVED\'</span>) {\n    router.<span class="f">push</span>(<span class="s">\'/confirmacion\'</span>)\n  } <span class="k">else</span> {\n    <span class="f">showErrorModal</span>(status)\n  }\n}\n\n<span class="c">// Server-side: Yuno POSTs to your webhook URL</span>\n<span class="c">// { "status": "APPROVED", "payment_id": "..." }</span>'
+    }
+  ]
+
+  var cur = 0
+
+  function renderTrail() {
+    var t = document.getElementById('wt-trail')
+    var html = ''
+    STEPS.forEach(function(s, i) {
+      var dc = i < cur ? 'done' : i === cur ? 'active' : ''
+      var lc = i < cur ? 'done' : ''
+      html += '<div class="wt-trail-dot ' + dc + '" onclick="(function(){wtGoStep(' + i + ')})()" title="Step ' + s.num + ': ' + s.title + '">' + s.num + '</div>'
+      if (i < STEPS.length - 1) html += '<div class="wt-trail-line ' + lc + '"></div>'
+    })
+    t.innerHTML = html
+  }
+
+  function renderCard() {
+    var s = STEPS[cur]
+    var mc = s.method === 'POST' ? 'POST' : s.method === 'GET' ? 'GET' : s.method === 'SDK' ? 'SDK' : 'CB'
+    document.getElementById('wt-card').innerHTML =
+      '<div class="wt-card-top">' +
+        '<div class="wt-step-circle" style="background:' + s.lc + '18;color:' + s.lc + ';border:1.5px solid ' + s.lc + '40">' + s.num + '</div>' +
+        '<div class="wt-card-meta">' +
+          '<div class="wt-layer-pill" style="background:' + s.lc + '14;color:' + s.lc + ';border:1px solid ' + s.lc + '30">' +
+            '<div class="wt-layer-dot" style="background:' + s.lc + '"></div>' + s.layer +
+          '</div>' +
+          '<div class="wt-card-title">' + s.title + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="wt-card-desc">' + s.desc + '</div>' +
+      '<div class="wt-code-block">' +
+        '<div class="wt-code-bar">' +
+          '<div class="wt-code-label"><div class="wt-code-dot" style="background:' + s.lc + '"></div>' + s.ep + '</div>' +
+          '<span class="wt-method ' + mc + '">' + mc + '</span>' +
+        '</div>' +
+        '<pre class="wt-code-pre">' + s.code + '</pre>' +
+      '</div>'
+    document.getElementById('wt-counter').textContent = 'Step ' + (cur + 1) + ' of ' + STEPS.length
+    document.getElementById('wt-prev').disabled = cur === 0
+    document.getElementById('wt-next').disabled = cur === STEPS.length - 1
+  }
+
+  window.wtGoStep = function(n) {
+    if (n < 0 || n >= STEPS.length || n === cur) return
+    var card = document.getElementById('wt-card')
+    card.classList.add('fade')
+    setTimeout(function() {
+      cur = n
+      renderTrail()
+      renderCard()
+      card.classList.remove('fade')
+    }, 200)
+  }
+
+  window.wtNav = function(dir) { wtGoStep(cur + dir) }
+
+  // Initial render
+  renderTrail()
+  renderCard()
+
+  // Stars
+  var sc = document.getElementById('wt-stars')
+  if (sc) {
+    for (var i = 0; i < 45; i++) {
+      var s = document.createElement('div')
+      s.className = 'star'
+      var sz = Math.random() * 1.8 + .8
+      s.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;top:' + (Math.random()*100) + '%;left:' + (Math.random()*100) + '%;opacity:' + (.3+Math.random()*.5)
+      sc.appendChild(s)
+    }
+  }
+
+  // Auto-advance steps 1→2→3→4 when section enters viewport
+  var autoFired = false
+  var obs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !autoFired && cur === 0) {
+      autoFired = true
+      setTimeout(function(){ wtGoStep(1) }, 800)
+      setTimeout(function(){ wtGoStep(2) }, 1700)
+      setTimeout(function(){ wtGoStep(3) }, 2600)
+    }
+  }, { threshold: 0.25 })
+  var wtSec = document.querySelector('.wt-section')
+  if (wtSec) obs.observe(wtSec)
+
+  // ── Card toggle ──
+  var wtCardOpen = false
+  window.wtToggleCard = function() {
+    wtCardOpen = !wtCardOpen
+    document.getElementById('wt-card-form').classList.toggle('open', wtCardOpen)
+    document.getElementById('wt-plus-card').classList.toggle('open', wtCardOpen)
+    document.getElementById('wt-pm-card').classList.toggle('selected', wtCardOpen)
+    document.getElementById('wt-plus-card').innerHTML = wtCardOpen
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="#6B9FFF" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'
+    if (wtCardOpen && cur < 4) wtGoStep(4)
+    if (wtCardOpen) setTimeout(function() { document.getElementById('wt-card-form').scrollIntoView({ behavior:'smooth', block:'nearest' }) }, 80)
+  }
+
+  window.wtSelectPM = function(el) {
+    document.querySelectorAll('#wt-pf .pm-card').forEach(function(c) { c.classList.remove('selected') })
+    el.classList.add('selected')
+    if (cur < 4) wtGoStep(4)
+  }
+
+  // ── Payment flow ──
+  window.wtStartProcessing = function() {
+    wtGoStep(5)
+    var phone = document.getElementById('wt-phone')
+    var btn = document.getElementById('wt-pay-btn')
+    btn.disabled = true
+    btn.textContent = 'Procesando…'
+
+    var ov1 = document.createElement('div')
+    ov1.className = 'proc-overlay'
+    ov1.innerHTML = '<div class="proc-ring"></div><div class="proc-t">Generando token…</div><div class="proc-s">Yuno SDK · One Time Token</div>'
+    phone.appendChild(ov1)
+
+    setTimeout(function() {
+      wtGoStep(6)
+      ov1.remove()
+      var ov2 = document.createElement('div')
+      ov2.className = 'proc-overlay'
+      ov2.innerHTML = '<div class="proc-ring"></div><div class="proc-t">Creando pago…</div><div class="proc-s">POST /v1/payments</div>'
+      phone.appendChild(ov2)
+
+      setTimeout(function() {
+        wtGoStep(7)
+        ov2.remove()
+        var tds = document.getElementById('wt-tds')
+        tds.classList.add('show')
+        tds.querySelector('.tds-otp').focus()
+      }, 1300)
+    }, 1400)
+  }
+
+  window.wtSubmit3DS = function() {
+    var phone = document.getElementById('wt-phone')
+    var ov = document.createElement('div')
+    ov.className = 'proc-overlay'
+    ov.style.zIndex = '250'
+    ov.innerHTML = '<div class="proc-ring"></div><div class="proc-t">Autenticando…</div><div class="proc-s">3D Secure · Verificando identidad</div>'
+    phone.appendChild(ov)
+
+    setTimeout(function() {
+      wtGoStep(9)
+      ov.remove()
+      document.getElementById('wt-tds').classList.remove('show')
+      document.getElementById('wt-suc').classList.add('show')
+      var bcEl = document.getElementById('wt-bc')
+      if (bcEl && !bcEl.children.length) {
+        for (var j = 0; j < 60; j++) {
+          var b = document.createElement('div')
+          b.className = 'bar'
+          var h = 14 + Math.random() * 18
+          b.style.cssText = 'height:' + h + 'px;width:' + (Math.random() > .4 ? 3 : 2) + 'px;'
+          bcEl.appendChild(b)
+        }
+      }
+    }, 1800)
+  }
+
+  window.wtReset = function() {
+    document.getElementById('wt-suc').classList.remove('show')
+    document.getElementById('wt-tds').classList.remove('show')
+    document.querySelectorAll('#wt-tds .tds-otp').forEach(function(inp) { inp.value = ''; inp.classList.remove('filled') })
+    document.getElementById('wt-bc').innerHTML = ''
+    var btn = document.getElementById('wt-pay-btn')
+    btn.disabled = false
+    btn.textContent = 'Pagar $448.00'
+    if (wtCardOpen) wtToggleCard()
+    document.querySelectorAll('#wt-pf .pm-card').forEach(function(c) { c.classList.remove('selected') })
+    document.querySelector('#wt-phone .page-content').scrollTop = 0
+    wtGoStep(0)
+  }
+
+  // OTP auto-advance (walkthrough)
+  document.querySelectorAll('#wt-tds .tds-otp').forEach(function(inp, i, all) {
+    inp.addEventListener('input', function() {
+      inp.value = inp.value.replace(/\D/g, '')
+      inp.classList.toggle('filled', inp.value.length > 0)
+      if (inp.value && i < all.length - 1) all[i + 1].focus()
+      if (cur < 8) wtGoStep(8)
+    })
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !inp.value && i > 0) all[i - 1].focus()
+    })
+  })
+
+})()
+</script>
 </body>
 </html>
