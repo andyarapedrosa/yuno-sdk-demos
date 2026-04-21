@@ -2915,7 +2915,7 @@
     var total = wtQties.adulto + wtQties.nino + wtQties.elder
     if (total < 1) return
     var phone = document.getElementById('wt-phone')
-    wtSpinner(phone, 'Creando sesión de pago…', 'POST /v1/checkout-sessions', 1100, function() {
+    wtSpinner(phone, 'Creando sesión de pago…', 'POST /v1/checkout/sessions', 1100, function() {
       wtGoStep(2)
       wtShowScreen(2)
     })
