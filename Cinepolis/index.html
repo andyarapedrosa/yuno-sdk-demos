@@ -2620,7 +2620,7 @@
       title: 'Create Checkout Session',
       desc: 'The merchant server requests a <strong>checkout session</strong> from Yuno, binding the order, amount, and customer. Yuno returns a session token used to initialize the SDK client-side.',
       method: 'POST', ep: '/v1/checkout-sessions',
-      code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/checkout-sessions \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n    <span class="p">"payment_description"</span>: <span class="s">"Super Mario Galaxy IMAX"</span>,\n    <span class="p">"country"</span>: <span class="s">"MX"</span>,\n    <span class="p">"amount"</span>: {\n      <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n      <span class="p">"value"</span>: <span class="n">44800</span>\n    },\n    <span class="p">"customer_id"</span>: <span class="s">"yuno_cust_id"</span>\n  }\''
+      code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/checkout-sessions \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n    <span class="p">"payment_description"</span>: <span class="s">"Super Mario Galaxy IMAX"</span>,\n    <span class="p">"country"</span>: <span class="s">"MX"</span>,\n    <span class="p">"amount"</span>: {\n      <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n      <span class="p">"value"</span>: <span class="n">44800</span>\n    },\n    <span class="p">"customer_id"</span>: <span class="s">"fa1e910d-73e6-4e06-b24b-91fe85c69a21"</span>\n  }\''
     },
     {
       num: 3, layer: 'Merchant Server', lc: '#06B6D4',
@@ -2683,7 +2683,7 @@
   var WT_RESPONSES = [
     {
       badge: 'ok', status: '201 Created', time: '213ms', size: '0.6 kb',
-      code: '{\n  <span class="p">"id"</span>: <span class="s">"cust_mx_29f3a8e1c4b7d2"</span>,\n  <span class="p">"merchant_customer_id"</span>: <span class="s">"cine_saman_001"</span>,\n  <span class="p">"first_name"</span>: <span class="s">"Saman"</span>,\n  <span class="p">"last_name"</span>: <span class="s">"Mortazavi Camacho"</span>,\n  <span class="p">"email"</span>: <span class="s">"saman.mor.cam@gmail.com"</span>,\n  <span class="p">"country"</span>: <span class="s">"MX"</span>,\n  <span class="p">"created_at"</span>: <span class="s">"2026-04-20T19:42:11.203Z"</span>\n}'
+      code: '{\n  <span class="p">"id"</span>: <span class="s">"fa1e910d-73e6-4e06-b24b-91fe85c69a21"</span>,\n  <span class="p">"merchant_customer_id"</span>: <span class="s">"cine_saman_001"</span>,\n  <span class="p">"first_name"</span>: <span class="s">"Saman"</span>,\n  <span class="p">"last_name"</span>: <span class="s">"Mortazavi Camacho"</span>,\n  <span class="p">"email"</span>: <span class="s">"saman.mor.cam@gmail.com"</span>,\n  <span class="p">"country"</span>: <span class="s">"MX"</span>,\n  <span class="p">"created_at"</span>: <span class="s">"2026-04-20T19:42:11.203Z"</span>\n}'
     },
     {
       badge: 'ok', status: '201 Created', time: '187ms', size: '0.4 kb',
