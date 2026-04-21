@@ -2025,14 +2025,14 @@
   .wt-header { text-align: center; margin-bottom: 56px; }
   .wt-header-label {
     display: inline-flex; align-items: center; gap: 7px;
-    background: rgba(124,58,237,.1); border: 1px solid rgba(124,58,237,.3);
-    color: #A78BFA; font-size: 11px; font-weight: 700;
+    background: rgba(43,99,217,.1); border: 1px solid rgba(43,99,217,.3);
+    color: #6B9FFF; font-size: 11px; font-weight: 700;
     letter-spacing: .6px; text-transform: uppercase;
     padding: 5px 14px; border-radius: 100px; margin-bottom: 16px;
   }
-  .wt-header-label-dot { width: 6px; height: 6px; border-radius: 50%; background: #7C3AED; }
+  .wt-header-label-dot { width: 6px; height: 6px; border-radius: 50%; background: #2B63D9; }
   .wt-title { font-size: 30px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 10px; line-height: 1.2; }
-  .wt-title em { font-style: normal; color: #A78BFA; }
+  .wt-title em { font-style: normal; color: #6B9FFF; }
   .wt-sub { font-size: 14px; color: rgba(255,255,255,.4); max-width: 480px; margin: 0 auto; line-height: 1.65; }
 
   /* ─── Two-column body ─── */
@@ -2055,13 +2055,13 @@
     flex-shrink: 0; cursor: pointer; transition: all .25s;
   }
   .wt-trail-dot:hover { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.5); }
-  .wt-trail-dot.done { background: rgba(124,58,237,.18); border-color: rgba(124,58,237,.4); color: #A78BFA; }
+  .wt-trail-dot.done { background: rgba(43,99,217,.18); border-color: rgba(43,99,217,.4); color: #6B9FFF; }
   .wt-trail-dot.active {
-    background: #7C3AED; border-color: #7C3AED; color: white;
-    box-shadow: 0 0 0 4px rgba(124,58,237,.2);
+    background: #2B63D9; border-color: #2B63D9; color: white;
+    box-shadow: 0 0 0 4px rgba(43,99,217,.2);
   }
   .wt-trail-line { flex: 1; height: 1.5px; background: rgba(255,255,255,.05); transition: background .3s; }
-  .wt-trail-line.done { background: rgba(124,58,237,.35); }
+  .wt-trail-line.done { background: rgba(43,99,217,.35); }
 
   /* ─── Step card ─── */
   .wt-card {
@@ -2113,7 +2113,7 @@
   }
   .wt-method.POST { background: rgba(34,197,94,.12); color: #4ade80; }
   .wt-method.GET  { background: rgba(96,165,250,.12); color: #93C5FD; }
-  .wt-method.SDK  { background: rgba(124,58,237,.12); color: #C4B5FD; }
+  .wt-method.SDK  { background: rgba(43,99,217,.12);  color: #93C5FD; }
   .wt-method.CB   { background: rgba(251,191,36,.1);  color: #FCD34D; }
 
   .wt-code-pre {
@@ -2123,9 +2123,9 @@
     color: rgba(255,255,255,.55);
     overflow-x: auto; white-space: pre;
   }
-  .wt-code-pre .k { color: #C4B5FD; }
+  .wt-code-pre .k { color: #93C5FD; }
   .wt-code-pre .s { color: #6EE7B7; }
-  .wt-code-pre .p { color: #93C5FD; }
+  .wt-code-pre .p { color: #6B9FFF; }
   .wt-code-pre .c { color: rgba(255,255,255,.22); font-style: italic; }
   .wt-code-pre .n { color: #FCD34D; }
   .wt-code-pre .f { color: #FB923C; }
@@ -2144,10 +2144,10 @@
   .wt-btn:hover:not(:disabled) { border-color: rgba(255,255,255,.25); color: rgba(255,255,255,.8); }
   .wt-btn:disabled { opacity: .3; cursor: default; }
   .wt-btn.wt-primary {
-    background: rgba(124,58,237,.15); border-color: rgba(124,58,237,.4); color: #C4B5FD;
+    background: rgba(43,99,217,.15); border-color: rgba(43,99,217,.4); color: #93C5FD;
   }
   .wt-btn.wt-primary:hover:not(:disabled) {
-    background: rgba(124,58,237,.28); border-color: rgba(124,58,237,.65); color: white;
+    background: rgba(43,99,217,.28); border-color: rgba(43,99,217,.65); color: white;
   }
   .wt-counter {
     flex: 1; text-align: center; font-size: 11px;
@@ -2159,6 +2159,78 @@
     .wt-doc-panel { position: static; width: 100%; max-width: 480px; }
     .wt-section { padding: 60px 20px 80px; }
   }
+
+  /* ─── Phone screens ─── */
+  .wt-pg { display: none; }
+  .wt-pg.wt-active { display: block; animation: wt-in .3s ease; }
+  @keyframes wt-in { from { opacity:0; transform:translateX(12px); } to { opacity:1; transform:translateX(0); } }
+
+  .wt-ticket-note { font-size: 11.5px; color: rgba(255,255,255,.4); text-align:center; margin-bottom:14px; line-height:1.5; }
+  .wt-ticket-cat { font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:rgba(255,255,255,.28); margin-bottom:8px; }
+  .wt-tkt-row { display:flex; align-items:center; padding:13px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+  .wt-tkt-row:last-child { border-bottom:none; }
+  .wt-tkt-info { flex:1; }
+  .wt-tkt-name { font-size:13px; font-weight:600; margin-bottom:2px; }
+  .wt-tkt-price { font-size:12px; color:rgba(255,255,255,.4); }
+  .wt-qty-ctrl { display:flex; align-items:center; gap:6px; }
+  .wt-qty-btn {
+    width:28px; height:28px; border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.2); background:transparent;
+    color:white; font-size:18px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .12s; font-family:inherit;
+  }
+  .wt-qty-btn:hover { border-color:rgba(255,255,255,.5); background:rgba(255,255,255,.06); }
+  .wt-qty-num { width:24px; text-align:center; font-size:15px; font-weight:700; }
+  .wt-tkt-subtotal {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 0 0; margin-top:4px; border-top:1px solid rgba(255,255,255,.05);
+  }
+  .wt-tkt-sublabel { font-size:13px; font-weight:600; color:rgba(255,255,255,.5); }
+  .wt-tkt-subval  { font-size:15px; font-weight:800; }
+
+  .wt-info-pill {
+    background:rgba(43,99,217,.08); border:1px solid rgba(43,99,217,.2);
+    border-radius:10px; padding:10px 14px; margin-bottom:14px;
+    font-size:12px; color:rgba(255,255,255,.6); line-height:1.5;
+  }
+  .wt-info-pill strong { color:white; }
+  .wt-cinema-bar {
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    border-radius:6px 6px 0 0; text-align:center;
+    padding:5px; font-size:10px; font-weight:700;
+    letter-spacing:2px; color:rgba(255,255,255,.25); margin-bottom:10px;
+  }
+  .wt-seat-grid { margin-bottom:12px; }
+  .wt-seat-row { display:flex; align-items:center; gap:3px; margin-bottom:3px; }
+  .wt-row-lbl { width:14px; font-size:9px; font-weight:700; color:rgba(255,255,255,.22); text-align:right; flex-shrink:0; }
+  .wt-seat {
+    flex:1; aspect-ratio:1; border-radius:3px;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.07);
+    cursor:pointer; transition:background .1s; max-width:26px;
+  }
+  .wt-seat.taken { background:rgba(255,255,255,.03); border-color:transparent; cursor:default; }
+  .wt-seat.sel   { background:#2B63D9; border-color:#2B63D9; }
+  .wt-seat:not(.taken):not(.sel):hover { background:rgba(43,99,217,.35); }
+  .wt-seat-legend { display:flex; gap:12px; justify-content:center; margin-bottom:10px; }
+  .wt-leg-item { display:flex; align-items:center; gap:5px; font-size:10px; color:rgba(255,255,255,.35); }
+  .wt-leg-box { width:10px; height:10px; border-radius:2px; }
+  .wt-selected-pill {
+    background:rgba(43,99,217,.08); border:1px solid rgba(43,99,217,.2);
+    border-radius:10px; padding:9px 14px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12px;
+  }
+
+  .wt-sum-movie { display:flex; gap:12px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,.06); margin-bottom:14px; }
+  .wt-sum-poster { width:48px; height:68px; border-radius:6px; object-fit:cover; flex-shrink:0; }
+  .wt-sum-title { font-size:14px; font-weight:800; margin-bottom:4px; line-height:1.3; }
+  .wt-sum-detail { font-size:12px; color:rgba(255,255,255,.5); line-height:1.65; }
+  .wt-sum-row { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:13px; }
+  .wt-sum-lbl { color:rgba(255,255,255,.5); }
+  .wt-sum-val { font-weight:600; }
+  .wt-sum-grand { display:flex; justify-content:space-between; padding:13px 0 0; font-size:15px; font-weight:800; }
+  .wt-sum-grand .wt-sum-val { color:#4ade80; font-size:17px; }
 </style>
 
 <!-- ════════════════════ WALKTHROUGH SECTION ════════════════════ -->
@@ -2196,7 +2268,7 @@
             <div class="nav-ava">SM</div>
           </div>
           <div class="mh-content">
-            <div class="mh-step">Paso 4 de 4</div>
+            <div class="mh-step" id="wt-mh-step">Paso 1 de 4</div>
             <div class="mh-movie">Super Mario Galaxy: La Película</div>
             <div class="mh-cinema">Samara</div>
             <div class="mh-details">20 Abril &nbsp;|&nbsp; 2:20 PM &nbsp;|&nbsp; Sala 1</div>
@@ -2204,6 +2276,107 @@
         </div>
 
         <div class="page-content">
+
+          <!-- ── Screen 0: Ticket selection ── -->
+          <div class="wt-pg wt-active" id="wt-pg-0">
+            <div class="section">
+              <div class="section-title">Selecciona tus boletos</div>
+              <div class="wt-ticket-note">Puedes comprar hasta 10 boletos por transacción.</div>
+              <div class="wt-ticket-cat">SALA 1 IMAX — TRADICIONAL</div>
+              <div class="wt-tkt-row">
+                <div class="wt-tkt-info">
+                  <div class="wt-tkt-name">ADULTO PLUUS</div>
+                  <div class="wt-tkt-price">$221.00 por boleto</div>
+                </div>
+                <div class="wt-qty-ctrl">
+                  <button class="wt-qty-btn" onclick="wtQty('adulto',-1)">−</button>
+                  <div class="wt-qty-num" id="wt-q-adulto">2</div>
+                  <button class="wt-qty-btn" onclick="wtQty('adulto',1)">+</button>
+                </div>
+              </div>
+              <div class="wt-tkt-row">
+                <div class="wt-tkt-info">
+                  <div class="wt-tkt-name">NIÑO PLUUS</div>
+                  <div class="wt-tkt-price">$169.00 por boleto</div>
+                </div>
+                <div class="wt-qty-ctrl">
+                  <button class="wt-qty-btn" onclick="wtQty('nino',-1)">−</button>
+                  <div class="wt-qty-num" id="wt-q-nino">0</div>
+                  <button class="wt-qty-btn" onclick="wtQty('nino',1)">+</button>
+                </div>
+              </div>
+              <div class="wt-tkt-row">
+                <div class="wt-tkt-info">
+                  <div class="wt-tkt-name">3RA EDAD PLUUS</div>
+                  <div class="wt-tkt-price">$169.00 por boleto</div>
+                </div>
+                <div class="wt-qty-ctrl">
+                  <button class="wt-qty-btn" onclick="wtQty('elder',-1)">−</button>
+                  <div class="wt-qty-num" id="wt-q-elder">0</div>
+                  <button class="wt-qty-btn" onclick="wtQty('elder',1)">+</button>
+                </div>
+              </div>
+              <div class="wt-tkt-subtotal">
+                <span class="wt-tkt-sublabel">Subtotal</span>
+                <span class="wt-tkt-subval" id="wt-tkt-total">$442.00</span>
+              </div>
+            </div>
+            <div class="pay-area" style="padding-top:0">
+              <button class="pay-btn" onclick="wtContinueTickets()">Continuar</button>
+            </div>
+          </div>
+
+          <!-- ── Screen 1: Seat selection ── -->
+          <div class="wt-pg" id="wt-pg-1">
+            <div class="section">
+              <div class="section-title">Selecciona tus asientos</div>
+              <div class="wt-info-pill">
+                <strong>Sala 1 IMAX</strong> · Dom 20/04 · 2:20 PM
+              </div>
+              <div class="wt-cinema-bar">P A N T A L L A</div>
+              <div class="wt-seat-grid" id="wt-seat-grid"></div>
+              <div class="wt-seat-legend">
+                <div class="wt-leg-item"><div class="wt-leg-box" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)"></div>Disponible</div>
+                <div class="wt-leg-item"><div class="wt-leg-box" style="background:#2B63D9"></div>Seleccionado</div>
+                <div class="wt-leg-item"><div class="wt-leg-box" style="background:rgba(255,255,255,.04)"></div>Ocupado</div>
+              </div>
+              <div class="wt-selected-pill">
+                <span style="color:rgba(255,255,255,.5);font-size:11px;">Asientos seleccionados</span>
+                <span style="font-weight:700;color:#6B9FFF;" id="wt-seat-display">G8 · G9</span>
+              </div>
+            </div>
+            <div class="pay-area" style="padding-top:0">
+              <button class="pay-btn" onclick="wtContinueSeats()">Confirmar asientos</button>
+            </div>
+          </div>
+
+          <!-- ── Screen 2: Order summary ── -->
+          <div class="wt-pg" id="wt-pg-2">
+            <div class="section">
+              <div class="section-title">Resumen de compra</div>
+              <div class="wt-sum-movie">
+                <img src="mario-poster.png" alt="Mario" class="wt-sum-poster">
+                <div>
+                  <div class="wt-sum-title">Super Mario Galaxy: La Película</div>
+                  <div class="wt-sum-detail">IMAX · Sala 1<br>Dom 20 Abril · 2:20 PM<br>Asientos: <strong style="color:white">G8 · G9</strong></div>
+                </div>
+              </div>
+              <div class="wt-sum-row"><span class="wt-sum-lbl">2× Adulto PLUUS IMAX</span><span class="wt-sum-val">$442.00</span></div>
+              <div class="wt-sum-row"><span class="wt-sum-lbl">Cargo por servicio</span><span class="wt-sum-val">$6.00</span></div>
+              <div class="wt-sum-grand"><span>Total (IVA incluido)</span><span class="wt-sum-val">$448.00</span></div>
+            </div>
+            <div class="section" style="border-bottom:none">
+              <div class="section-title">Datos de contacto</div>
+              <div class="dp-field"><div class="dp-label">Nombre</div><div class="dp-value">Saman Mortazavi</div></div>
+              <div class="dp-field" style="margin-bottom:0"><div class="dp-label">Correo electrónico</div><div class="dp-value" style="font-size:14px">saman.mor.cam@gmail.com</div></div>
+            </div>
+            <div class="pay-area">
+              <button class="pay-btn" onclick="wtContinueSummary()">Ir al pago</button>
+            </div>
+          </div>
+
+          <!-- ── Screen 3: Payment form ── -->
+          <div class="wt-pg" id="wt-pg-3">
           <div class="section">
             <div class="section-title">Datos personales</div>
             <div class="dp-field"><div class="dp-label">Nombre(s)</div><div class="dp-value">Saman</div></div>
@@ -2293,7 +2466,9 @@
           <div class="pay-area">
             <button class="pay-btn" id="wt-pay-btn" onclick="wtStartProcessing()">Pagar $448.00</button>
           </div>
-        </div>
+          </div><!-- /wt-pg-3 -->
+
+        </div><!-- /page-content -->
 
         <!-- 3DS overlay -->
         <div class="tds-screen" id="wt-tds">
@@ -2376,21 +2551,21 @@
   // ── Step data ──────────────────────────────────────────────────
   var STEPS = [
     {
-      num: 1, layer: 'Merchant Server', lc: '#7C3AED',
+      num: 1, layer: 'Merchant Server', lc: '#06B6D4',
       title: 'Create Customer',
       desc: 'Before checkout begins, the merchant server creates a <strong>customer profile</strong> in Yuno. This enables saved cards, tokenization, and a personalized experience across sessions.',
       method: 'POST', ep: '/v1/customers',
       code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/customers \\\n  --header \'content-type: application/json\' \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"country"</span>: <span class="s">"MX"</span>,\n    <span class="p">"merchant_customer_id"</span>: <span class="s">"cine_saman_001"</span>,\n    <span class="p">"first_name"</span>: <span class="s">"Saman"</span>,\n    <span class="p">"last_name"</span>: <span class="s">"Mortazavi"</span>,\n    <span class="p">"email"</span>: <span class="s">"saman.mor.cam@gmail.com"</span>\n  }\''
     },
     {
-      num: 2, layer: 'Merchant Server', lc: '#7C3AED',
+      num: 2, layer: 'Merchant Server', lc: '#06B6D4',
       title: 'Create Checkout Session',
       desc: 'The merchant server requests a <strong>checkout session</strong> from Yuno, binding the order, amount, and customer. Yuno returns a session token used to initialize the SDK client-side.',
       method: 'POST', ep: '/v1/checkout-sessions',
       code: 'curl --request POST \\\n  --url https://api-sandbox.y.uno/v1/checkout-sessions \\\n  --header \'private-secret-key: sk_sandbox_...\' \\\n  --data \'{\n    <span class="p">"merchant_order_id"</span>: <span class="s">"CP-20260420-7723"</span>,\n    <span class="p">"payment_description"</span>: <span class="s">"Super Mario Galaxy IMAX"</span>,\n    <span class="p">"country"</span>: <span class="s">"MX"</span>,\n    <span class="p">"amount"</span>: {\n      <span class="p">"currency"</span>: <span class="s">"MXN"</span>,\n      <span class="p">"value"</span>: <span class="n">44800</span>\n    },\n    <span class="p">"customer_id"</span>: <span class="s">"yuno_cust_id"</span>\n  }\''
     },
     {
-      num: 3, layer: 'Merchant Server', lc: '#7C3AED',
+      num: 3, layer: 'Merchant Server', lc: '#06B6D4',
       title: 'List Payment Methods',
       desc: 'The server queries Yuno for <strong>available payment methods</strong> for this country, currency, and customer. The result drives what the SDK will render — no hardcoding required.',
       method: 'GET', ep: '/v1/payment-methods',
@@ -2418,7 +2593,7 @@
       code: '<span class="c">// Custom pay button triggers SDK tokenization</span>\ndocument.<span class="f">getElementById</span>(<span class="s">\'btn-pay\'</span>)\n  .<span class="f">addEventListener</span>(<span class="s">\'click\'</span>, () => {\n    yuno.<span class="f">submitOneTimeTokenForm</span>()\n  })\n\n<span class="c">// SDK fires this callback with the OTT</span>\n<span class="k">async</span> <span class="f">yunoCreatePayment</span>(oneTimeToken) {\n  <span class="c">// oneTimeToken: single-use JWT, valid for one call</span>\n  <span class="k">await</span> <span class="f">createPaymentOnServer</span>(oneTimeToken)\n}'
     },
     {
-      num: 7, layer: 'Merchant Server', lc: '#7C3AED',
+      num: 7, layer: 'Merchant Server', lc: '#06B6D4',
       title: 'Create Payment',
       desc: 'The merchant server uses the <strong>One Time Token</strong> to call Yuno\'s payments API. Yuno orchestrates the transaction with the selected payment provider (BBVA, Stripe, etc.).',
       method: 'POST', ep: '/v1/payments',
@@ -2448,14 +2623,20 @@
   ]
 
   var cur = 0
+  var wtScreen = 0
+  var wtCardOpen = false
+  var wtQties = { adulto: 2, nino: 0, elder: 0 }
+  var wtPrices = { adulto: 221, nino: 169, elder: 169 }
+  var wtSeats = ['G8', 'G9']
 
+  // ── Step panel ───────────────────────────────────────────────
   function renderTrail() {
     var t = document.getElementById('wt-trail')
     var html = ''
     STEPS.forEach(function(s, i) {
       var dc = i < cur ? 'done' : i === cur ? 'active' : ''
       var lc = i < cur ? 'done' : ''
-      html += '<div class="wt-trail-dot ' + dc + '" onclick="(function(){wtGoStep(' + i + ')})()" title="Step ' + s.num + ': ' + s.title + '">' + s.num + '</div>'
+      html += '<div class="wt-trail-dot ' + dc + '" onclick="wtGoStep(' + i + ')" title="Step ' + s.num + ': ' + s.title + '">' + s.num + '</div>'
       if (i < STEPS.length - 1) html += '<div class="wt-trail-line ' + lc + '"></div>'
     })
     t.innerHTML = html
@@ -2466,9 +2647,9 @@
     var mc = s.method === 'POST' ? 'POST' : s.method === 'GET' ? 'GET' : s.method === 'SDK' ? 'SDK' : 'CB'
     document.getElementById('wt-card').innerHTML =
       '<div class="wt-card-top">' +
-        '<div class="wt-step-circle" style="background:' + s.lc + '18;color:' + s.lc + ';border:1.5px solid ' + s.lc + '40">' + s.num + '</div>' +
+        '<div class="wt-step-circle" style="background:' + s.lc + '1A;color:' + s.lc + ';border:1.5px solid ' + s.lc + '44">' + s.num + '</div>' +
         '<div class="wt-card-meta">' +
-          '<div class="wt-layer-pill" style="background:' + s.lc + '14;color:' + s.lc + ';border:1px solid ' + s.lc + '30">' +
+          '<div class="wt-layer-pill" style="background:' + s.lc + '14;color:' + s.lc + ';border:1px solid ' + s.lc + '33">' +
             '<div class="wt-layer-dot" style="background:' + s.lc + '"></div>' + s.layer +
           '</div>' +
           '<div class="wt-card-title">' + s.title + '</div>' +
@@ -2505,33 +2686,121 @@
   renderTrail()
   renderCard()
 
-  // Stars
+  // ── Stars ────────────────────────────────────────────────────
   var sc = document.getElementById('wt-stars')
   if (sc) {
     for (var i = 0; i < 45; i++) {
-      var s = document.createElement('div')
-      s.className = 'star'
+      var star = document.createElement('div')
+      star.className = 'star'
       var sz = Math.random() * 1.8 + .8
-      s.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;top:' + (Math.random()*100) + '%;left:' + (Math.random()*100) + '%;opacity:' + (.3+Math.random()*.5)
-      sc.appendChild(s)
+      star.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;top:' + (Math.random()*100) + '%;left:' + (Math.random()*100) + '%;opacity:' + (.3+Math.random()*.5)
+      sc.appendChild(star)
     }
   }
 
-  // Auto-advance steps 1→2→3→4 when section enters viewport
-  var autoFired = false
-  var obs = new IntersectionObserver(function(entries) {
-    if (entries[0].isIntersecting && !autoFired && cur === 0) {
-      autoFired = true
-      setTimeout(function(){ wtGoStep(1) }, 800)
-      setTimeout(function(){ wtGoStep(2) }, 1700)
-      setTimeout(function(){ wtGoStep(3) }, 2600)
-    }
-  }, { threshold: 0.25 })
-  var wtSec = document.querySelector('.wt-section')
-  if (wtSec) obs.observe(wtSec)
+  // ── Screen management ────────────────────────────────────────
+  function wtShowScreen(n) {
+    document.querySelectorAll('#wt-phone .wt-pg').forEach(function(el) { el.classList.remove('wt-active') })
+    var pg = document.getElementById('wt-pg-' + n)
+    if (pg) pg.classList.add('wt-active')
+    wtScreen = n
+    var labels = ['Paso 1 de 4', 'Paso 2 de 4', 'Paso 3 de 4', 'Paso 4 de 4']
+    var hdr = document.getElementById('wt-mh-step')
+    if (hdr) hdr.textContent = labels[n] || 'Paso 4 de 4'
+    var pc = document.querySelector('#wt-phone .page-content')
+    if (pc) pc.scrollTop = 0
+  }
 
-  // ── Card toggle ──
-  var wtCardOpen = false
+  // ── Seat grid ─────────────────────────────────────────────────
+  function wtInitSeats() {
+    var grid = document.getElementById('wt-seat-grid')
+    if (!grid || grid.children.length) return
+    var rows = ['A','B','C','D','E','F','G','H']
+    var taken = ['A3','A4','B1','B2','B5','B8','C4','C6','C9','D2','D3','D6','E1','E5','E8','F3','F4','F7','H2','H5','H6','H9']
+    rows.forEach(function(row) {
+      var rowEl = document.createElement('div')
+      rowEl.className = 'wt-seat-row'
+      var lbl = document.createElement('div')
+      lbl.className = 'wt-row-lbl'
+      lbl.textContent = row
+      rowEl.appendChild(lbl)
+      for (var j = 1; j <= 9; j++) {
+        var sid = row + j
+        var seat = document.createElement('div')
+        seat.className = 'wt-seat'
+        if (taken.indexOf(sid) >= 0) {
+          seat.classList.add('taken')
+        } else if (wtSeats.indexOf(sid) >= 0) {
+          seat.classList.add('sel')
+        } else {
+          (function(id, el) {
+            el.addEventListener('click', function() {
+              if (wtSeats.indexOf(id) >= 0) {
+                wtSeats.splice(wtSeats.indexOf(id), 1)
+                el.classList.remove('sel')
+              } else if (wtSeats.length < 2) {
+                wtSeats.push(id)
+                el.classList.add('sel')
+              }
+              var disp = document.getElementById('wt-seat-display')
+              if (disp) disp.textContent = wtSeats.length ? wtSeats.join(' · ') : 'Ninguno'
+            })
+          })(sid, seat)
+        }
+        rowEl.appendChild(seat)
+      }
+      grid.appendChild(rowEl)
+    })
+  }
+  wtInitSeats()
+
+  // ── Ticket counter ───────────────────────────────────────────
+  window.wtQty = function(type, delta) {
+    wtQties[type] = Math.max(0, Math.min(10, (wtQties[type] || 0) + delta))
+    var el = document.getElementById('wt-q-' + type)
+    if (el) el.textContent = wtQties[type]
+    var total = wtQties.adulto * wtPrices.adulto + wtQties.nino * wtPrices.nino + wtQties.elder * wtPrices.elder
+    var tv = document.getElementById('wt-tkt-total')
+    if (tv) tv.textContent = '$' + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  }
+
+  // ── Screen transitions ───────────────────────────────────────
+  function wtSpinner(phone, txt, sub, ms, cb) {
+    var ov = document.createElement('div')
+    ov.className = 'proc-overlay'
+    ov.innerHTML = '<div class="proc-ring"></div><div class="proc-t">' + txt + '</div><div class="proc-s">' + sub + '</div>'
+    phone.appendChild(ov)
+    setTimeout(function() { ov.remove(); cb() }, ms)
+  }
+
+  window.wtContinueTickets = function() {
+    var total = wtQties.adulto + wtQties.nino + wtQties.elder
+    if (total < 1) return
+    var phone = document.getElementById('wt-phone')
+    wtSpinner(phone, 'Creando cliente…', 'POST /v1/customers', 1200, function() {
+      wtGoStep(1)
+      wtShowScreen(1)
+    })
+  }
+
+  window.wtContinueSeats = function() {
+    if (!wtSeats.length) return
+    var phone = document.getElementById('wt-phone')
+    wtSpinner(phone, 'Creando sesión…', 'POST /v1/checkout-sessions', 1100, function() {
+      wtGoStep(2)
+      wtShowScreen(2)
+    })
+  }
+
+  window.wtContinueSummary = function() {
+    var phone = document.getElementById('wt-phone')
+    wtSpinner(phone, 'Cargando métodos de pago…', 'GET /v1/payment-methods · mountCheckoutLite()', 1400, function() {
+      wtGoStep(3)
+      wtShowScreen(3)
+    })
+  }
+
+  // ── Card toggle ──────────────────────────────────────────────
   window.wtToggleCard = function() {
     wtCardOpen = !wtCardOpen
     document.getElementById('wt-card-form').classList.toggle('open', wtCardOpen)
@@ -2550,35 +2819,22 @@
     if (cur < 4) wtGoStep(4)
   }
 
-  // ── Payment flow ──
+  // ── Payment flow ─────────────────────────────────────────────
   window.wtStartProcessing = function() {
     wtGoStep(5)
     var phone = document.getElementById('wt-phone')
     var btn = document.getElementById('wt-pay-btn')
     btn.disabled = true
     btn.textContent = 'Procesando…'
-
-    var ov1 = document.createElement('div')
-    ov1.className = 'proc-overlay'
-    ov1.innerHTML = '<div class="proc-ring"></div><div class="proc-t">Generando token…</div><div class="proc-s">Yuno SDK · One Time Token</div>'
-    phone.appendChild(ov1)
-
-    setTimeout(function() {
+    wtSpinner(phone, 'Generando token…', 'Yuno SDK · One Time Token', 1400, function() {
       wtGoStep(6)
-      ov1.remove()
-      var ov2 = document.createElement('div')
-      ov2.className = 'proc-overlay'
-      ov2.innerHTML = '<div class="proc-ring"></div><div class="proc-t">Creando pago…</div><div class="proc-s">POST /v1/payments</div>'
-      phone.appendChild(ov2)
-
-      setTimeout(function() {
+      wtSpinner(phone, 'Creando pago…', 'POST /v1/payments', 1200, function() {
         wtGoStep(7)
-        ov2.remove()
         var tds = document.getElementById('wt-tds')
         tds.classList.add('show')
         tds.querySelector('.tds-otp').focus()
-      }, 1300)
-    }, 1400)
+      })
+    })
   }
 
   window.wtSubmit3DS = function() {
@@ -2588,7 +2844,6 @@
     ov.style.zIndex = '250'
     ov.innerHTML = '<div class="proc-ring"></div><div class="proc-t">Autenticando…</div><div class="proc-s">3D Secure · Verificando identidad</div>'
     phone.appendChild(ov)
-
     setTimeout(function() {
       wtGoStep(9)
       ov.remove()
@@ -2613,11 +2868,32 @@
     document.querySelectorAll('#wt-tds .tds-otp').forEach(function(inp) { inp.value = ''; inp.classList.remove('filled') })
     document.getElementById('wt-bc').innerHTML = ''
     var btn = document.getElementById('wt-pay-btn')
-    btn.disabled = false
-    btn.textContent = 'Pagar $448.00'
+    btn.disabled = false; btn.textContent = 'Pagar $448.00'
     if (wtCardOpen) wtToggleCard()
     document.querySelectorAll('#wt-pf .pm-card').forEach(function(c) { c.classList.remove('selected') })
-    document.querySelector('#wt-phone .page-content').scrollTop = 0
+    // reset tickets
+    wtQties = { adulto: 2, nino: 0, elder: 0 }
+    document.getElementById('wt-q-adulto').textContent = '2'
+    document.getElementById('wt-q-nino').textContent = '0'
+    document.getElementById('wt-q-elder').textContent = '0'
+    document.getElementById('wt-tkt-total').textContent = '$442.00'
+    // reset seats
+    wtSeats = ['G8','G9']
+    document.querySelectorAll('#wt-seat-grid .wt-seat').forEach(function(s) {
+      if (!s.classList.contains('taken')) s.classList.remove('sel')
+    })
+    ;['G8','G9'].forEach(function(sid) {
+      var rows = document.querySelectorAll('#wt-seat-grid .wt-seat-row')
+      var rIdx = 'ABCDEFGH'.indexOf(sid[0])
+      var cIdx = parseInt(sid.slice(1)) - 1
+      if (rows[rIdx]) {
+        var seats = rows[rIdx].querySelectorAll('.wt-seat')
+        if (seats[cIdx]) seats[cIdx].classList.add('sel')
+      }
+    })
+    var disp = document.getElementById('wt-seat-display')
+    if (disp) disp.textContent = 'G8 · G9'
+    wtShowScreen(0)
     wtGoStep(0)
   }
 
