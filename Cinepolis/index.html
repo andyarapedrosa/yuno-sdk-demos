@@ -2329,10 +2329,6 @@
                 <label class="fi-label">Correo electrónico</label>
                 <input class="fi-input" id="wt-cf-email" type="email" value="saman.mor.cam@gmail.com" placeholder="correo@ejemplo.com">
               </div>
-              <div class="fi" style="margin-bottom:0">
-                <label class="fi-label">ID de cliente (merchant)</label>
-                <input class="fi-input" id="wt-cf-id" type="text" value="cine_saman_001" placeholder="merchant_customer_id">
-              </div>
             </div>
             <div class="pay-area">
               <button class="pay-btn" onclick="wtContinueCustomer()">Confirmar datos</button>
@@ -3031,7 +3027,7 @@
     wtShowScreen(0)
     wtGoStep(0)
     // restore customer form fields
-    var defaults = { 'wt-cf-nombre': 'Saman', 'wt-cf-apellido': 'Mortazavi Camacho', 'wt-cf-email': 'saman.mor.cam@gmail.com', 'wt-cf-id': 'cine_saman_001' }
+    var defaults = { 'wt-cf-nombre': 'Saman', 'wt-cf-apellido': 'Mortazavi Camacho', 'wt-cf-email': 'saman.mor.cam@gmail.com' }
     Object.keys(defaults).forEach(function(id) { var el = document.getElementById(id); if (el) el.value = defaults[id] })
   }
 
