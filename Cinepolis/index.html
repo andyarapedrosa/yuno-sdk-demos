@@ -2268,7 +2268,7 @@
             <div class="nav-ava">SM</div>
           </div>
           <div class="mh-content">
-            <div class="mh-step" id="wt-mh-step">Paso 1 de 4</div>
+            <div class="mh-step" id="wt-mh-step">Mis datos</div>
             <div class="mh-movie">Super Mario Galaxy: La Película</div>
             <div class="mh-cinema">Samara</div>
             <div class="mh-details">20 Abril &nbsp;|&nbsp; 2:20 PM &nbsp;|&nbsp; Sala 1</div>
@@ -2277,8 +2277,35 @@
 
         <div class="page-content">
 
-          <!-- ── Screen 0: Ticket selection ── -->
+          <!-- ── Screen 0: Customer data ── -->
           <div class="wt-pg wt-active" id="wt-pg-0">
+            <div class="section">
+              <div class="section-title">Tus datos de cliente</div>
+              <p style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;margin-bottom:18px;">Registramos tu perfil en Yuno para habilitar métodos guardados y experiencias personalizadas.</p>
+              <div class="fi">
+                <label class="fi-label">Nombre(s)</label>
+                <input class="fi-input" id="wt-cf-nombre" type="text" value="Saman" placeholder="Nombre(s)">
+              </div>
+              <div class="fi">
+                <label class="fi-label">Apellido(s)</label>
+                <input class="fi-input" id="wt-cf-apellido" type="text" value="Mortazavi Camacho" placeholder="Apellido(s)">
+              </div>
+              <div class="fi">
+                <label class="fi-label">Correo electrónico</label>
+                <input class="fi-input" id="wt-cf-email" type="email" value="saman.mor.cam@gmail.com" placeholder="correo@ejemplo.com">
+              </div>
+              <div class="fi" style="margin-bottom:0">
+                <label class="fi-label">ID de cliente (merchant)</label>
+                <input class="fi-input" id="wt-cf-id" type="text" value="cine_saman_001" placeholder="merchant_customer_id">
+              </div>
+            </div>
+            <div class="pay-area">
+              <button class="pay-btn" onclick="wtContinueCustomer()">Confirmar datos</button>
+            </div>
+          </div>
+
+          <!-- ── Screen 1: Ticket selection ── -->
+          <div class="wt-pg" id="wt-pg-1">
             <div class="section">
               <div class="section-title">Selecciona tus boletos</div>
               <div class="wt-ticket-note">Puedes comprar hasta 10 boletos por transacción.</div>
@@ -2326,8 +2353,8 @@
             </div>
           </div>
 
-          <!-- ── Screen 1: Seat selection ── -->
-          <div class="wt-pg" id="wt-pg-1">
+          <!-- ── Screen 2: Seat selection ── -->
+          <div class="wt-pg" id="wt-pg-2">
             <div class="section">
               <div class="section-title">Selecciona tus asientos</div>
               <div class="wt-info-pill">
@@ -2350,8 +2377,8 @@
             </div>
           </div>
 
-          <!-- ── Screen 2: Order summary ── -->
-          <div class="wt-pg" id="wt-pg-2">
+          <!-- ── Screen 3: Order summary ── -->
+          <div class="wt-pg" id="wt-pg-3">
             <div class="section">
               <div class="section-title">Resumen de compra</div>
               <div class="wt-sum-movie">
@@ -2375,8 +2402,8 @@
             </div>
           </div>
 
-          <!-- ── Screen 3: Payment form ── -->
-          <div class="wt-pg" id="wt-pg-3">
+          <!-- ── Screen 4: Payment form ── -->
+          <div class="wt-pg" id="wt-pg-4">
           <div class="section">
             <div class="section-title">Datos personales</div>
             <div class="dp-field"><div class="dp-label">Nombre(s)</div><div class="dp-value">Saman</div></div>
@@ -2466,7 +2493,7 @@
           <div class="pay-area">
             <button class="pay-btn" id="wt-pay-btn" onclick="wtStartProcessing()">Pagar $448.00</button>
           </div>
-          </div><!-- /wt-pg-3 -->
+          </div><!-- /wt-pg-4 -->
 
         </div><!-- /page-content -->
 
@@ -2704,7 +2731,7 @@
     var pg = document.getElementById('wt-pg-' + n)
     if (pg) pg.classList.add('wt-active')
     wtScreen = n
-    var labels = ['Paso 1 de 4', 'Paso 2 de 4', 'Paso 3 de 4', 'Paso 4 de 4']
+    var labels = ['Mis datos', 'Paso 1 de 4', 'Paso 2 de 4', 'Paso 3 de 4', 'Paso 4 de 4']
     var hdr = document.getElementById('wt-mh-step')
     if (hdr) hdr.textContent = labels[n] || 'Paso 4 de 4'
     var pc = document.querySelector('#wt-phone .page-content')
@@ -2773,9 +2800,7 @@
     setTimeout(function() { ov.remove(); cb() }, ms)
   }
 
-  window.wtContinueTickets = function() {
-    var total = wtQties.adulto + wtQties.nino + wtQties.elder
-    if (total < 1) return
+  window.wtContinueCustomer = function() {
     var phone = document.getElementById('wt-phone')
     wtSpinner(phone, 'Creando cliente…', 'POST /v1/customers', 1200, function() {
       wtGoStep(1)
@@ -2783,20 +2808,26 @@
     })
   }
 
-  window.wtContinueSeats = function() {
-    if (!wtSeats.length) return
+  window.wtContinueTickets = function() {
+    var total = wtQties.adulto + wtQties.nino + wtQties.elder
+    if (total < 1) return
     var phone = document.getElementById('wt-phone')
-    wtSpinner(phone, 'Creando sesión…', 'POST /v1/checkout-sessions', 1100, function() {
+    wtSpinner(phone, 'Creando sesión de pago…', 'POST /v1/checkout-sessions', 1100, function() {
       wtGoStep(2)
       wtShowScreen(2)
     })
+  }
+
+  window.wtContinueSeats = function() {
+    if (!wtSeats.length) return
+    wtShowScreen(3)
   }
 
   window.wtContinueSummary = function() {
     var phone = document.getElementById('wt-phone')
     wtSpinner(phone, 'Cargando métodos de pago…', 'GET /v1/payment-methods · mountCheckoutLite()', 1400, function() {
       wtGoStep(3)
-      wtShowScreen(3)
+      wtShowScreen(4)
     })
   }
 
@@ -2809,7 +2840,7 @@
     document.getElementById('wt-plus-card').innerHTML = wtCardOpen
       ? '<svg viewBox="0 0 24 24" fill="none" stroke="#6B9FFF" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg>'
       : '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'
-    if (wtCardOpen && cur < 4) wtGoStep(4)
+    if (wtCardOpen && cur < 4) wtGoStep(4)  // step 5: user selects
     if (wtCardOpen) setTimeout(function() { document.getElementById('wt-card-form').scrollIntoView({ behavior:'smooth', block:'nearest' }) }, 80)
   }
 
@@ -2895,6 +2926,9 @@
     if (disp) disp.textContent = 'G8 · G9'
     wtShowScreen(0)
     wtGoStep(0)
+    // restore customer form fields
+    var defaults = { 'wt-cf-nombre': 'Saman', 'wt-cf-apellido': 'Mortazavi Camacho', 'wt-cf-email': 'saman.mor.cam@gmail.com', 'wt-cf-id': 'cine_saman_001' }
+    Object.keys(defaults).forEach(function(id) { var el = document.getElementById(id); if (el) el.value = defaults[id] })
   }
 
   // OTP auto-advance (walkthrough)
