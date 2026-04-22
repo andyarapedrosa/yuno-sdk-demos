@@ -2671,9 +2671,9 @@
     {
       num: 9, layer: 'Payment Provider', lc: '#059669',
       title: 'Desafío 3DS en el Proveedor',
-      desc: 'El banco emisor (BBVA) presenta un <strong>desafío 3D Secure</strong> — un OTP de 6 dígitos enviado por SMS. Esto se renderiza dentro del contenedor de acciones del SDK y es manejado íntegramente por el emisor. Cero código de Cinépolis.',
-      method: 'SDK', ep: '#yuno-action-form → 3DS iframe (BBVA)',
-      code: '<span class="c">// The 3DS iframe is injected by the SDK</span>\n<span class="c">// into #yuno-action-form. Cinépolis writes</span>\n<span class="c">// zero code for this screen.</span>\n\n<span class="c">// Yuno SDK supports:</span>\n<span class="c">// ✓ EMV 3DS v2 (frictionless + challenge)</span>\n<span class="c">// ✓ 3DS v1 (legacy fallback)</span>\n<span class="c">// ✓ OTP screens (provider-native)</span>\n<span class="c">// ✓ Redirect-based auth (wallets, BNPL)</span>'
+      desc: 'El banco emisor (por ejemplo, BBVA) presenta un <strong>desafío 3D Secure</strong> — por ejemplo, un OTP de 6 dígitos enviado por SMS. Esta pantalla se renderiza dentro del contenedor de acciones del SDK y es manejada íntegramente por el emisor. El merchant no escribe código para esta vista.',
+      method: 'SDK', ep: '#yuno-action-form ← iframe 3DS inyectado por el SDK (después de yuno.continuePayment())',
+      code: '<span class="c">// El iframe 3DS es inyectado automáticamente por el SDK</span>\n<span class="c">// dentro de #yuno-action-form. Cinépolis no implementa</span>\n<span class="c">// ninguna lógica específica de 3DS/OTP aquí.</span>\n\n<span class="c">// Yuno SDK soporta:</span>\n<span class="c">// ✓ EMV 3DS v2 (frictionless + challenge)</span>\n<span class="c">// ✓ 3DS v1 (fallback legado)</span>\n<span class="c">// ✓ Pantallas OTP del proveedor</span>\n<span class="c">// ✓ Flujos basados en redirección</span>'
     },
     {
       num: 10, layer: 'Merchant Client', lc: '#D97706',
