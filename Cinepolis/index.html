@@ -1812,25 +1812,25 @@
       <div class="col-tag default" style="margin-bottom:10px;">Pantalla 3 · España</div>
       <h3 style="font-size:15px; margin-bottom:10px;">SCA obligatoria en Europa</h3>
       <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; margin-bottom:14px;">
-        Solo cambiando <code>countryCode: 'ES'</code>, el SDK Lite activa los métodos europeos y gestiona automáticamente la <strong style="color:rgba(255,255,255,.7)">SCA de PSD2</strong> — sin ningún código adicional de Cinépolis.
+        Solo cambiando <code>countryCode: 'ES'</code> y creando la sesión de checkout para España, la misma integración Lite monta formularios para los métodos disponibles en Europa, sin cambiar la lógica de negocio ni el flujo del SDK.
       </p>
       <div style="display:flex; flex-direction:column; gap:8px;">
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#4ade80; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">PSD2 · SCA automática</strong> — la autenticación fuerte de 2 factores es obligatoria en la UE. El SDK orquesta el flujo (contraseña + OTP) sin intervención del merchant.
+            <strong style="color:rgba(255,255,255,.7);">PSD2 · SCA automática</strong> — la autenticación fuerte de cliente (SCA) es obligatoria en la UE bajo PSD2. Yuno orquesta automáticamente la autenticación 3D Secure (frictionless o con challenge: OTP, app bancaria, biometría, etc.) según la configuración de 3DS en el Dashboard, sin código específico de Cinépolis para estos pasos.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">Bizum y SEPA</strong> — métodos dominantes en España, procesados por Redsys, Adyen o Stripe según la configuración del Dashboard.
+            <strong style="color:rgba(255,255,255,.7);">Bizum y SEPA</strong> — métodos dominantes en España, procesados a través de proveedores locales (por ejemplo, Redsys, Adyen o Stripe) según las conexiones configuradas en el Dashboard de Yuno.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">BNPL local</strong> — Klarna y SeQura habilitados con un toggle en el Dashboard, sin integración adicional.
+            <strong style="color:rgba(255,255,255,.7);">BNPL local</strong> — Klarna y SeQura se habilitan como métodos BNPL locales para España desde el Dashboard, una vez firmados los acuerdos comerciales con los proveedores, sin cambios adicionales en la integración del SDK.
           </p>
         </div>
       </div>
