@@ -1495,25 +1495,25 @@
       <div class="col-tag default" style="margin-bottom:10px;">Pantalla 2 · India</div>
       <h3 style="font-size:15px; margin-bottom:10px;">Misma integración, métodos locales</h3>
       <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.6; margin-bottom:14px;">
-        Solo cambiando <code>countryCode: 'IN'</code>, el SDK Lite devuelve automáticamente los métodos disponibles para India — sin cambiar una línea de lógica de negocio.
+        Solo cambiando <code>countryCode: 'IN'</code> y creando la sesión de checkout para India, la misma integración Lite monta formularios para los métodos disponibles en India, sin cambiar una línea de lógica de negocio.
       </p>
       <div style="display:flex; flex-direction:column; gap:8px;">
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#4ade80; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">UPI e Net Banking</strong> — métodos dominantes en India, procesados por Razorpay, BillDesk o PayU India según la configuración en el Dashboard.
+            <strong style="color:rgba(255,255,255,.7);">UPI y Net Banking</strong> — métodos dominantes en India, procesados por proveedores locales (por ejemplo, Razorpay, BillDesk o PayU India) según la configuración definida en el Dashboard de Yuno.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">RuPay</strong> — red de tarjetas doméstica de India, habilitada junto con Visa y Mastercard sin código adicional.
+            <strong style="color:rgba(255,255,255,.7);">RuPay</strong> — red de tarjetas doméstica de India, habilitada junto con Visa y Mastercard sin código adicional, siempre que la conexión correspondiente esté configurada en Yuno.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">Un solo SDK, múltiples países</strong> — la misma llamada <code>mountCheckoutLite()</code> sirve México, India y cualquier otro mercado configurado.
+            <strong style="color:rgba(255,255,255,.7);">Un solo SDK, múltiples países</strong> — la misma integración Lite (<code>startCheckout</code> + <code>mountCheckoutLite()</code>) sirve México, India y cualquier otro mercado configurado en Yuno.
           </p>
         </div>
       </div>
