@@ -2680,7 +2680,7 @@
       title: 'Mostrar Resultado del Pago',
       desc: 'Yuno entrega el estado final vía <strong>webhook</strong> (server-to-server) y el callback <strong>yunoPaymentResult</strong> (cliente). El merchant renderiza la pantalla de confirmación con el resultado.',
       method: 'CB', ep: 'yunoPaymentResult + POST webhook',
-      code: '<span class="c">// Client-side result callback (inside startCheckout config)</span>\n<span class="f">yunoPaymentResult</span>(data) {\n  <span class="k">const</span> { status } = data\n  <span class="c">// "SUCCEEDED" | "REJECTED" | "ERROR" | "PENDING"</span>\n\n  <span class="k">if</span> (status === <span class="s">\'SUCCEEDED\'</span>) {\n    router.<span class="f">push</span>(<span class="s">\'/confirmacion\'</span>)\n  } <span class="k">else</span> {\n    <span class="f">showErrorModal</span>(status)\n  }\n}'
+      code: '<span class="c">// Client-side result callback (inside startCheckout config)</span>\n<span class="f">yunoPaymentResult</span>(data) {\n  <span class="k">const</span> { status } = data\n  <span class="c">// "SUCCEEDED" | "REJECTED" | "ERROR" | "PENDING" | "CANCELED"</span>\n\n  <span class="k">if</span> (status === <span class="s">\'SUCCEEDED\'</span>) {\n    router.<span class="f">push</span>(<span class="s">\'/confirmacion\'</span>)\n  } <span class="k">else</span> {\n    <span class="f">showErrorModal</span>(status)\n  }\n}'
     }
   ]
 
