@@ -2650,7 +2650,7 @@
     {
       num: 6, layer: 'Yuno SDK', lc: '#2B63D9',
       title: 'Obtiene One Time Token',
-      desc: 'El merchant llama a <strong>submitOneTimeTokenForm()</strong> al hacer clic en el botón. El SDK tokeniza los datos de la tarjeta de forma segura y devuelve un <strong>token JWT de uso único</strong> a través del callback yunoCreatePayment.',
+      desc: 'El SDK tokeniza los datos de la tarjeta de forma segura y devuelve un <strong>token de uso único (OTT)</strong> a través del callback <strong>yunoCreatePayment</strong>. Este token es opaco para el merchant y es válido para una sola llamada a POST /v1/payments.',
       method: 'SDK', ep: 'submitOneTimeTokenForm() → yunoCreatePayment()',
       code: '<span class="c">// Custom pay button triggers SDK tokenization</span>\ndocument.<span class="f">getElementById</span>(<span class="s">\'btn-pay\'</span>)\n  .<span class="f">addEventListener</span>(<span class="s">\'click\'</span>, () => {\n    yuno.<span class="f">submitOneTimeTokenForm</span>()\n  })\n\n<span class="c">// SDK fires this callback with the OTT</span>\n<span class="k">async</span> <span class="f">yunoCreatePayment</span>(oneTimeToken) {\n  <span class="c">// oneTimeToken: single-use JWT, valid for one call</span>\n  <span class="k">await</span> <span class="f">createPaymentOnServer</span>(oneTimeToken)\n}'
     },
@@ -2707,7 +2707,7 @@
     },
     {
       badge: 'sdk', status: 'SDK Callback', time: '', size: '',
-      code: '<span class="c">// yunoCreatePayment(oneTimeToken)</span>\n<span class="c">// Single-use JWT passed as argument:</span>\n\n<span class="s">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9</span>\n<span class="s"> .eyJzdWIiOiJjdXN0X214XzI5ZjNhOGUxYzRi</span>\n<span class="s">  N2QyIiwicG10IjoiQ0FSRCIsImV4cCI6MTc0N</span>\n<span class="s">  TI3MDU5M30.RSASHA256_sig_omitted..."</span>\n\n<span class="c">// Valid for one POST /v1/payments call only</span>'
+      code: '<span class="c">// yunoCreatePayment(oneTimeToken)</span>\n<span class="c">// Token opaco de uso único (ilustrativo):</span>\n\n<span class="s">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9</span>\n<span class="s"> .eyJzdWIiOiJjdXN0X214XzI5ZjNhOGUxYzRi</span>\n<span class="s">  N2QyIiwicG10IjoiQ0FSRCIsImV4cCI6MTc0N</span>\n<span class="s">  TI3MDU5M30.RSASHA256_sig_omitted..."</span>\n\n<span class="c">// Válido para una sola llamada a POST /v1/payments</span>'
     },
     {
       badge: 'ok', status: '201 Created', time: '341ms', size: '0.7 kb',
