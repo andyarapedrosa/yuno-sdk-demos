@@ -1153,37 +1153,37 @@
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#4ade80; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">Control total desde el Dashboard</strong> — los métodos de pago se activan o desactivan directamente en el Dashboard de Yuno, sin tocar una línea de código. El SDK refleja los cambios en tiempo real.
+            <strong style="color:rgba(255,255,255,.7);">Control desde el Dashboard</strong> — los métodos de pago se activan o desactivan en el Dashboard de Yuno. La sesión de checkout y la API de métodos reflejan estos cambios en tiempo real, sin necesidad de nuevos deploys.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">Métodos localizados automáticamente</strong> — Yuno devuelve solo los métodos disponibles para México (Tarjeta, Click to Pay, Aplazo, PayPal) según la configuración del país.
+            <strong style="color:rgba(255,255,255,.7);">Métodos localizados automáticamente</strong> — Yuno devuelve solo los métodos disponibles para México (Tarjeta, Click to Pay, Aplazo) según la configuración del país y de la cuenta. (PayPal y wallets se montan como botones externos.)
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">Cero datos sensibles en el servidor</strong> — el formulario de tarjeta corre en un iframe aislado (Yuno Secure Fields). Cinépolis solo recibe el <code>oneTimeToken</code>.
+            <strong style="color:rgba(255,255,255,.7);">Cero datos sensibles en el servidor</strong> — el formulario de tarjeta corre en un iframe aislado (Yuno Secure Fields). Cinépolis solo recibe el <code>oneTimeToken</code>, nunca ve el PAN ni datos sensibles.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">PCI DSS Nivel 1</strong> — Cinépolis no necesita certificación PCI propia; la responsabilidad recae en Yuno.
+            <strong style="color:rgba(255,255,255,.7);">PCI DSS Nivel 1</strong> — Cinépolis no necesita certificación PCI propia de alto nivel; la responsabilidad de protección de datos de tarjeta recae en Yuno, certificado PCI DSS Nivel 1.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">100% personalizable</strong> — colores, fuentes y textos del iframe se inyectan vía <code>card.styles</code>, manteniendo la identidad visual de Cinépolis Go.
+            <strong style="color:rgba(255,255,255,.7);">100% personalizable</strong> — colores, fuentes y textos del iframe se controlan vía <code>card.styles</code>, manteniendo la identidad visual de Cinépolis Go en todo el flujo de pago.
           </p>
         </div>
         <div style="display:flex; gap:8px; align-items:flex-start;">
           <div style="width:6px; height:6px; border-radius:50%; background:#6B9FFF; margin-top:5px; flex-shrink:0;"></div>
           <p style="font-size:12px; color:rgba(255,255,255,.5); line-height:1.5;">
-            <strong style="color:rgba(255,255,255,.7);">3DS y MSI automáticos</strong> — autenticación 3D Secure y meses sin intereses gestionados por el SDK, sin código adicional de Cinépolis.
+            <strong style="color:rgba(255,255,255,.7);">3DS y MSI gestionados por Yuno</strong> — la autenticación 3D Secure y los meses sin intereses se configuran en Yuno y en el adquirente; el SDK orquesta los flujos (3DS, OTP, redirects) sin lógica adicional en el frontend de Cinépolis.
           </p>
         </div>
       </div>
